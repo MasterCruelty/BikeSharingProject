@@ -1,60 +1,65 @@
-
 import java.util.*;
+import java.text.DateFormat;
 
 /**
- * 
+ * Classe che rappresenta la carta di credito in possesso da un utente.
+ * Utilizzata come unico metodo di pagamento per il prelievo delle bici nel sistema.
  */
 public class CartaDiCredito {
 
-	/**
-	 * Default constructor
-	 */
-	public CartaDiCredito() {
-	}
-
-	/**
-	 * 
-	 */
 	private int numeroCarta;
 
-	/**
-	 * 
-	 */
 	private Date scadenza;
+	
+	private double residuo;
 
+	//costruttore
+	public CartaDiCredito(int numeroCarta, Date scadenza) {
+		this.numeroCarta = numeroCarta;
+		this.scadenza = scadenza;
+		this.residuo = residuo;
+	}
 
 	/**
-	 * @return
+	 * @return numeroCarta
 	 */
 	public int getNumero() {
-		// TODO implement here
-		return 0;
+		return this.numeroCarta;
 	}
 
 	/**
-	 * @return
+	 * @return scadenza
 	 */
 	public Date getScadenza() {
-		// TODO implement here
-		return null;
+		return this.scadenza;
+	}
+	
+	/**
+	 * @return residuo
+	 */
+	public double getResiduo(){
+		return this.residuo;
+	}
+	
+	/**
+	 * @param numeroCarta
+	 */
+	public void setNumero(int numeroCarta) {
+		this.numeroCarta = numeroCarta;
 	}
 
 	/**
-	 * @param num 
-	 * @return
+	 * @param scadenza
 	 */
-	public void setNumero(int num) {
-		// TODO implement here
-		return null;
+	public void setScadenza(Date scadenza) {
+		this.scadenza = scadenza;
 	}
-
+	
 	/**
-	 * @param data 
-	 * @return
+	 * @param residuo
 	 */
-	public void setScadenza(Date data) {
-		// TODO implement here
-		return null;
+	public void setResiduo(double residuo){
+		this.residuo = residuo
 	}
 
 }
