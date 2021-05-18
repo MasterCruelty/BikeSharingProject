@@ -1,72 +1,64 @@
-
 import java.util.*;
 
 /**
- * 
+ * Classe che rappresenta un oggetto di tipo abbonamento che può essere acquistato e in seguito posseduto da un utente.
+ * I due tipi di abbonamento(occasionale e annuale) sono definiti in classi che estendono questa.
  */
 public abstract class Abbonamento {
 
-	/**
-	 * Default constructor
-	 */
-	public Abbonamento() {
+	private int prezzo;
+
+	private String scadenza;
+
+	//costruttore
+	public Abbonamento(int prezzo, String scadenza) {
+		this.prezzo = prezzo;
+		this.scadenza = scadenza;
 	}
 
 	/**
-	 * 
-	 */
-	private void prezzo;
-
-	/**
-	 * 
-	 */
-	private void scadenza;
-
-
-	/**
-	 * @return
+	 * @return prezzo
 	 */
 	public int getPrezzo() {
-		// TODO implement here
-		return 0;
+		return this.prezzo;
 	}
 
 	/**
-	 * @return
+	 * @return scadenza
 	 */
-	public Date getScadenza() {
-		// TODO implement here
-		return null;
-	}
-
-	/**
-	 * 
-	 */
-	public void inizioValidità() {
-		// TODO implement here
+	public String getScadenza() {
+		return this.scadenza;
 	}
 
 	/**
 	 * @param prezzo 
-	 * @return
 	 */
 	public void setPrezzo(int prezzo) {
-		// TODO implement here
-		return null;
+		this.prezzo = prezzo;
 	}
 
 	/**
 	 * @param scadenza 
-	 * @return
 	 */
-	public void setScadenza(Date scadenza) {
-		// TODO implement here
-		return null;
+	public void setScadenza(String scadenza) {
+		this.scadenza = scadenza;
 	}
-
 	/**
-	 * 
-	 */
-	public abstract void inizioValidità();
-
+	* @param scadenza
+	* @return Boolean
+	*/
+	public Boolean controlloValidita(String scadenza){
+		String[] giornoMeseAnno = scadenza.split("/");
+		GregorianCalendar controlloScadenza = new GregorianCalendar(Integer.parseInt(giornoMeseAnno[2]),Integer.parseInt(giornoMeseAnno[1])+1,Integer.parseInt(giornoMeseAnno[0]));
+		GregorianCalendar oggi = new GregorianCalendar(GregorianCalendar.YEAR,GregorianCalendar.MONTH+1,GregorianCalendar.DAY_OF_MONTH);
+		//controllo se la data odierna non è successiva alla data di scadenza dell'abbonamento.
+		if(oggi.before(controlloScadenza)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	//implementato nelle due classi generalizzate
+	public abstract void inizioValidita();
 }
