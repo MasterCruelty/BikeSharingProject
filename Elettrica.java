@@ -8,15 +8,20 @@ public class Elettrica extends Bicicletta {
 
 	private boolean seggiolino;
 	//costruttore
-	public Elettrica(double tariffa = 1.50,String orario, boolean seggiolino) {
-		super(tariffa,orario);
+	public Elettrica(double tariffa,String orario, boolean seggiolino) {
+		super(tariffa = 1.50,orario);
 		this.seggiolino = seggiolino;
 	}
-	
+	/**
+	* @return seggiolino
+	*/
 	public boolean getSeggiolino(){
 		return this.seggiolino;
 	}
 	
+	/**
+	* @param seggiolino
+	*/
 	public void setSeggiolino(boolean seggiolino){
 		this.seggiolino = seggiolino;
 	}
