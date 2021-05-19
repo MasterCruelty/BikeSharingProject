@@ -6,12 +6,12 @@ import java.util.*;
  */
 public abstract class Abbonamento {
 
-	private int prezzo;
+	private double prezzo;
 
 	private String scadenza;
 
 	//costruttore
-	public Abbonamento(int prezzo, String scadenza) {
+	public Abbonamento(double prezzo, String scadenza) {
 		this.prezzo = prezzo;
 		this.scadenza = scadenza;
 	}
@@ -19,7 +19,7 @@ public abstract class Abbonamento {
 	/**
 	 * @return prezzo
 	 */
-	public int getPrezzo() {
+	public double getPrezzo() {
 		return this.prezzo;
 	}
 
@@ -33,7 +33,7 @@ public abstract class Abbonamento {
 	/**
 	 * @param prezzo 
 	 */
-	public void setPrezzo(int prezzo) {
+	public void setPrezzo(double prezzo) {
 		this.prezzo = prezzo;
 	}
 

@@ -6,17 +6,13 @@ import java.util.*;
  */
 public class Annuale extends Abbonamento {
 	
-	private int prezzo = 36;
-	
-	private String scadenza;
-	
 	//costruttore
-	public Annuale(int prezzo, String scadenza) {
-		super(prezzo, scadenza);
+	public Annuale(double prezzo, String scadenza) {
+		super(prezzo = 36, scadenza);
 	}
 	
 	public void inizioValidita() {
 		GregorianCalendar oggi = new GregorianCalendar(GregorianCalendar.YEAR,GregorianCalendar.MONTH+1,GregorianCalendar.DAY_OF_MONTH);
-		this.scadenza = String.valueOf(oggi.get(GregorianCalendar.DAY_OF_MONTH)) + "/" + String.valueOf(oggi.get(GregorianCalendar.MONTH)) + "/" + String.valueOf(oggi.get(GregorianCalendar.YEAR+1));
+		super.setScadenza(String.valueOf(oggi.get(GregorianCalendar.DAY_OF_MONTH)) + "/" + String.valueOf(oggi.get(GregorianCalendar.MONTH)) + "/" + String.valueOf(oggi.get(GregorianCalendar.YEAR+1)));
 	}
 }
