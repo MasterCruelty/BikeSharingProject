@@ -1,57 +1,46 @@
-
 import java.util.*;
 
 /**
- * 
+ * Classe che rappresenta un oggetto di tipo bicicletta.
+ * I diversi tipi di bicicletta ereditano questa classe astratta.
  */
 public abstract class Bicicletta {
 
-	/**
-	 * Default constructor
-	 */
-	public Bicicletta() {
+	private static double tariffa;
+
+	private String orarioPrelievo = "";
+	
+	//costruttore
+	public Bicicletta(double tariffa, String orarioPrelievo) {
+		this.tariffa = tariffa;
+		this.orarioPrelievo = orarioPrelievo;
 	}
 
 	/**
-	 * 
-	 */
-	private static double tariffa;
-
+	* @return tariffa
+	*/
+	public double getTariffa(){
+		return this.tariffa;
+	}
+	
 	/**
-	 * 
+	 * @param tariffa 
 	 */
-	private Time orarioPrelievo;
-
-
-
-
-
+	public void setTariffa(double tariffa){
+		this.tariffa = tariffa;
+	}
 	/**
-	 * @return
+	 * @return orarioPrelievo
 	 */
-	public abstract double getTariffa();
-
-	/**
-	 * @return
-	 */
-	public Time getOrarioPrelievo() {
-		// TODO implement here
-		return null;
+	public String getOrarioPrelievo() {
+		return this.orarioPrelievo;
 	}
 
 	/**
 	 * @param orario 
 	 * @return
 	 */
-	public void setOrarioPrelievo(Time orario) {
-		// TODO implement here
-		return null;
+	public void setOrarioPrelievo(String orario) {
+		this.orarioPrelievo = orario;
 	}
-
-	/**
-	 * @param tariffa 
-	 * @return
-	 */
-	public abstract void setTariffa(double tariffa);
-
 }

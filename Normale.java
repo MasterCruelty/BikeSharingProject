@@ -1,53 +1,30 @@
-
 import java.util.*;
 
 /**
- * 
+ * classe che rappresenta una bicicletta di tipo tradizionale.
+ * Oltre alle componenti ereditate dalla classe bicicletta, vi è un altro parametro per la prima mezz'ora gratuita.
  */
 public class Normale extends Bicicletta {
 
-	/**
-	 * Default constructor
-	 */
-	public Normale() {
+	private boolean mezzoraGratuita = false;
+	
+	//costruttore
+	public Normale(double tariffa = 0.50, String orario, boolean mezzoraGratuita) {
+		super(tariffa,orario);
+		this.mezzoraGratuita = mezzoraGratuita;
 	}
 
 	/**
-	 * 
-	 */
-	private Boolean mezzoraGratuita;
-
-	/**
-	 * 
-	 */
-	private Boolean studente;
-
-	/**
-	 * @return
+	 * @return mezzoraGratuita
 	 */
 	public Boolean getMezzoraGratuita() {
-		// TODO implement here
-		return null;
+		return this.mezzoraGratuita;
 	}
 
 	/**
 	 * @param gratis 
-	 * @return
 	 */
 	public void setMezzoraGratuita(Boolean gratis) {
-		// TODO implement here
-		return null;
+		this.mezzoraGratuita = gratis;
 	}
-
-	/**
-	 * @return
-	 */
-	public abstract double getTariffa();
-
-	/**
-	 * @param tariffa 
-	 * @return
-	 */
-	public abstract void setTariffa(double tariffa);
-
 }
