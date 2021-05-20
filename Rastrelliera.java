@@ -1,71 +1,89 @@
-
 import java.util.*;
 
 /**
- * 
+ * classe che rappresenta un oggetto di tipo rastrelliera. 
+ * Ogni rastrelliera ha un certo numero di posti e diversi tipi di morsa in base alle biciclette posteggiate.
  */
 public class Rastrelliera {
 
-	/**
-	 * Default constructor
-	 */
-	public Rastrelliera() {
+	private int numeroPosti;
+
+	private int numeroRastrelliera;
+
+	private Morsa[] morse;
+	
+	private Bicicletta[] biciclette;
+	
+	//costruttore
+	public Rastrelliera(int numeroPosti, int numeroRastrelliera, Morsa[] morse,Bicicletta[] biciclette) {
+		this.numeroPosti = numeroPosti;
+		this.numeroRastrelliera = numeroRastrelliera;
+		this.morse = morse;
+		this.biciclette = biciclette;
 	}
 
 	/**
-	 * 
-	 */
-	private int numeroPosti;
-
-	/**
-	 * 
-	 */
-	private int numeroRastrelliera;
-
-
-
-
-
-
-
-
-	/**
-	 * 
-	 */
-	private Morsa morsa;
-
-	/**
-	 * @return
+	 * @return numeroPosti
 	 */
 	public int getNumeroPosti() {
-		// TODO implement here
-		return 0;
+		return this.numeroPosti;
 	}
 
 	/**
 	 * @param posti 
-	 * @return
 	 */
 	public void setNumeroPosti(int posti) {
-		// TODO implement here
-		return null;
+		this.numeroPosti = posti;
 	}
 
 	/**
-	 * @return
+	 * @return numeroRastrelliera
 	 */
 	public int getNumeroRastrelliera() {
-		// TODO implement here
-		return 0;
+		return this.numeroRastrelliera;
 	}
 
 	/**
 	 * @param numero 
-	 * @return
 	 */
 	public void setNumeroRastrelliera(int numero) {
-		// TODO implement here
-		return null;
+		this.numeroRastrelliera = numero;
 	}
-
+	/**
+	* @return biciclette
+	*/
+	public Bicicletta[] getBiciclette(){
+		return this.biciclette;
+	}
+	
+	/**
+	* @param biciclette
+	*/
+	public void setBiciclette(Bicicletta[] biciclette){
+		this.biciclette = biciclette;
+	}
+	
+	/**
+	* @return morse
+	*/
+	public Morsa[] getMorse(){
+		return this.morse;
+	}
+	
+	/**
+	* @param morse
+	*/
+	public void setMorse(Morsa[] morse){
+		this.morse = morse;
+	}
+	
+	public void rimuoviBicicletta(Rastrelliera rastrelliera, Bicicletta bici){
+		Bicicletta[] bicicletteRastrelliera = rastrelliera.getBiciclette();
+		for(int i = 0;i < bicicletteRastrelliera.length;i++){
+			if(bicicletteRastrelliera[i].getOrarioPrelievo().equals(bici.getOrarioPrelievo())){
+				bicicletteRastrelliera[i] = null;
+				rastrelliera.setBiciclette(bicicletteRastrelliera);
+			}
+		}	
+	}
 }

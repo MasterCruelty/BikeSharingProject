@@ -1,193 +1,153 @@
-
 import java.util.*;
 
 /**
- * 
+ * classe che rappresenta un utente e le operazioni che può effettuare.
+ * Tramite due attributi boolean viene specificato che l'utente è uno studente, un membro del personale o nessuno dei due.
  */
 public class Utente {
 
-	/**
-	 * Default constructor
-	 */
-	public Utente() {
-	}
-
-	/**
-	 * 
-	 */
 	private String nome;
 
-	/**
-	 * 
-	 */
 	private String cognome;
 
-	/**
-	 * 
-	 */
 	private Boolean statusStudente;
 
-	/**
-	 * 
-	 */
-	private Boolean Staff;
+	private Boolean staff;
 
-	/**
-	 * 
-	 */
 	private Abbonamento abbonamento;
 
-
-	/**
-	 * 
-	 */
 	private CartaDiCredito carta;
-
-	/**
-	 * @return
-	 */
-	public String getNome() {
-		// TODO implement here
-		return "";
+	
+	//costruttore
+	public Utente(String nome, String cognome, Boolean statusStudente, Boolean staff, Abbonamento abbonamento, CartaDiCredito carta) {
+		this.nome = nome;
+		this.cognome = cognome;
+		this.statusStudente = statusStudente;
+		this.staff = staff;
+		this.abbonamento = abbonamento;
+		this.carta = carta;
 	}
 
 	/**
-	 * @return
+	 * @return nome
+	 */
+	public String getNome() {
+		return this.nome;
+	}
+
+	/**
+	 * @return cognome
 	 */
 	public String getCognome() {
 		// TODO implement here
-		return "";
+		return this.cognome;
 	}
 
 	/**
-	 * @return
+	 * @return statusStudente
 	 */
 	public Boolean getStatus() {
 		// TODO implement here
-		return null;
+		return this.statusStudente;
 	}
 
 	/**
-	 * @return
+	 * @return abbonamento
 	 */
 	public Abbonamento getAbbonamento() {
 		// TODO implement here
-		return null;
+		return this.abbonamento;
 	}
 
 	/**
-	 * @return
+	 * @return carta
 	 */
 	public CartaDiCredito getCarta() {
 		// TODO implement here
-		return null;
+		return this.carta;
 	}
 
 	/**
-	 * @return
-	 */
-	public String getTipoUtente() {
-		// TODO implement here
-		return "";
-	}
-
-	/**
-	 * @return
+	 * @return staff
 	 */
 	public Boolean getStaff() {
 		// TODO implement here
-		return null;
+		return this.staff;
 	}
 
 	/**
 	 * @param nome 
-	 * @return
 	 */
 	public void setNome(String nome) {
-		// TODO implement here
-		return null;
+		this.nome = nome;
 	}
 
 	/**
 	 * @param cognome 
-	 * @return
 	 */
 	public void setCognome(String cognome) {
-		// TODO implement here
-		return null;
+		this.cognome = cognome;
 	}
 
 	/**
 	 * @param status 
-	 * @return
 	 */
 	public void setStatus(Boolean status) {
-		// TODO implement here
-		return null;
+		this.statusStudente = status;
 	}
 
 	/**
 	 * @param carta 
-	 * @return
 	 */
 	public void setCarta(CartaDiCredito carta) {
-		// TODO implement here
-		return null;
+		this.carta = carta;
 	}
 
 	/**
 	 * @param abbonamento 
-	 * @return
 	 */
 	public void setAbbonamento(Abbonamento abbonamento) {
-		// TODO implement here
-		return null;
-	}
-
-	/**
-	 * @param tipoUtente 
-	 * @return
-	 */
-	public void setTipoUtente(String tipoUtente) {
-		// TODO implement here
-		return null;
+		this.abbonamento = abbonamento;
 	}
 
 	/**
 	 * @param staff 
-	 * @return
 	 */
 	public void setStaff(Boolean staff) {
-		// TODO implement here
-		return null;
+		this.staff = staff;
 	}
 
 	/**
 	 * @param carta 
-	 * @return
 	 */
-	public void paga(CartaDiCredito carta) {
-		// TODO implement here
-		return null;
+	public void paga(double importo) {
+		this.carta.setResiduo(this.carta.getResiduo() - importo);
 	}
 
 	/**
 	 * @param carta 
-	 * @return
 	 */
-	public void acquista(CartaDiCredito carta) {
-		// TODO implement here
-		return null;
+	public void acquista(Abbonamento abbonamento) {
+		this.carta.setResiduo(this.carta.getResiduo() - abbonamento.getPrezzo());
+		this.abbonamento = abbonamento;
 	}
 
 	/**
 	 * @param bici 
 	 * @param numero 
-	 * @return
 	 */
 	public void ricolloca(Bicicletta bici, Rastrelliera numero) {
-		// TODO implement here
-		return null;
+		Bicicletta[] bicicletteRastrelliera = numero.getBiciclette();
+		if(bicicletteRastrelliera.length == numero.getNumeroPosti()){
+			System.out.println("Rastrelliera " + numero.getNumeroRastrelliera() + " già completa");
+		}
+		else{
+			for(int i = 0;i<bicicletteRastrelliera.length;i++){
+				if(bicicletteRastrelliera[i] == null){
+					bicicletteRastrelliera[i] = bici;
+					break;
+				}
+			}
+		}
 	}
-
 }

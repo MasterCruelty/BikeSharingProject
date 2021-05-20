@@ -1,54 +1,37 @@
-
 import java.util.*;
 
 /**
- * 
+ * classe che simula la morsa e il suo blocco/sblocco all'interno di una rastrelliera.
  */
 public class Morsa {
 
-	/**
-	 * Default constructor
-	 */
-	public Morsa() {
-	}
-
-	/**
-	 * 
-	 */
 	private String tipoMorsa;
 
-
+	public Morsa(String tipo) {
+		this.tipoMorsa = tipo;
+	}
 
 
 	/**
-	 * @return
+	 * @return tipoMorsa
 	 */
 	public String getTipoMorsa() {
-		// TODO implement here
-		return "";
+		return this.tipoMorsa;
 	}
 
 	/**
 	 * @param tipoMorsa 
-	 * @return
 	 */
 	public void setTipoMorsa(String tipoMorsa) {
-		// TODO implement here
-		return null;
+		this.tipoMorsa = tipoMorsa;
 	}
 
-	/**
-	 * 
-	 */
 	public void sblocco() {
-		// TODO implement here
+		System.out.println("Morsa " + this.getTipoMorsa() + " sbloccata.");
 	}
 
-	/**
-	 * 
-	 */
 	public void blocca() {
-		// TODO implement here
+		System.out.println("Morsa " + this.getTipoMorsa() + " bloccata.");
 	}
 
 }

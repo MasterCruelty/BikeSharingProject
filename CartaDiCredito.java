@@ -59,7 +59,7 @@ public class CartaDiCredito {
 	 * @param residuo
 	 */
 	public void setResiduo(double residuo){
-		this.residuo = residuo
+		this.residuo = residuo;
 	}
 
 }
