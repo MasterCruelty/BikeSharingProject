@@ -8,7 +8,7 @@ public abstract class Bicicletta {
 
 	private static double tariffa;
 
-	private String orarioPrelievo = "";
+	private String orarioPrelievo;
 	
 	//costruttore
 	public Bicicletta(double tariffa, String orarioPrelievo) {

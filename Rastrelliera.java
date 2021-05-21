@@ -79,6 +79,8 @@ public class Rastrelliera {
 	
 	public void rimuoviBicicletta(Rastrelliera rastrelliera, Bicicletta bici){
 		Bicicletta[] bicicletteRastrelliera = rastrelliera.getBiciclette();
+		GregorianCalendar ora_attuale = new GregorianCalendar();
+		bici.setOrarioPrelievo(String.valueOf(ora_attuale.get(GregorianCalendar.HOUR_OF_DAY)) + ":" + String.valueOf(ora_attuale.get(GregorianCalendar.MINUTE)));
 		for(int i = 0;i < bicicletteRastrelliera.length;i++){
 			if(bicicletteRastrelliera[i].getOrarioPrelievo().equals(bici.getOrarioPrelievo())){
 				bicicletteRastrelliera[i] = null;
