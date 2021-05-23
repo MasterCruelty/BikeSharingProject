@@ -41,5 +41,4 @@ public class FinestraAvvio extends JFrame{
 	public void ascoltoRestituzione(ActionListener bottoneRestituzione){
 		restituzione.addActionListener(bottoneRestituzione);
 	}
-
 }

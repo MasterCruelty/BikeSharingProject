@@ -10,9 +10,9 @@ public class Utente {
 
 	private String cognome;
 
-	private Boolean statusStudente;
+	private boolean statusStudente;
 
-	private Boolean staff;
+	private boolean staff;
 
 	private Abbonamento abbonamento;
 
@@ -46,7 +46,7 @@ public class Utente {
 	/**
 	 * @return statusStudente
 	 */
-	public Boolean getStatus() {
+	public boolean getStatus() {
 		// TODO implement here
 		return this.statusStudente;
 	}
@@ -70,7 +70,7 @@ public class Utente {
 	/**
 	 * @return staff
 	 */
-	public Boolean getStaff() {
+	public boolean getStaff() {
 		// TODO implement here
 		return this.staff;
 	}
@@ -92,7 +92,7 @@ public class Utente {
 	/**
 	 * @param status 
 	 */
-	public void setStatus(Boolean status) {
+	public void setStatus(boolean status) {
 		this.statusStudente = status;
 	}
 
@@ -113,7 +113,7 @@ public class Utente {
 	/**
 	 * @param staff 
 	 */
-	public void setStaff(Boolean staff) {
+	public void setStaff(boolean staff) {
 		this.staff = staff;
 	}
 
