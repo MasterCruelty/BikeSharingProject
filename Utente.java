@@ -9,6 +9,8 @@ public class Utente {
 	private String nome;
 
 	private String cognome;
+	
+	private String password;
 
 	private boolean statusStudente;
 
@@ -19,7 +21,7 @@ public class Utente {
 	private CartaDiCredito carta;
 	
 	//costruttore
-	public Utente(String nome, String cognome, Boolean statusStudente, Boolean staff, Abbonamento abbonamento, CartaDiCredito carta) {
+	public Utente(String nome, String cognome, boolean statusStudente, boolean staff, Abbonamento abbonamento, CartaDiCredito carta) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.statusStudente = statusStudente;
@@ -41,6 +43,13 @@ public class Utente {
 	public String getCognome() {
 		// TODO implement here
 		return this.cognome;
+	}
+	
+	/**
+	 * @return password
+	 */
+	public String getPassword() {
+		return this.password;
 	}
 
 	/**
@@ -87,6 +96,13 @@ public class Utente {
 	 */
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
+	}
+	
+	/**
+	 * @param password
+	 */
+	public void setPassword() {
+		this.password = password;
 	}
 
 	/**

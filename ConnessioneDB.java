@@ -28,7 +28,7 @@ public class ConnessioneDB{
 	/**
 	 * @return connessione
 	 */
-	public static Connection getConnesione() throws SQLException{
+	public static Connection getConnessione(){
 		return connessione;
 	}
 }
