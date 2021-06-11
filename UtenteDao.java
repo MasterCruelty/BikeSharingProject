@@ -22,7 +22,7 @@ public class UtenteDao{
 		preparato.setBoolean(6, utente.getStaff());
 		preparato.executeUpdate();
 		
-		query = "INSERT INTO abbonamento(utente,prezzo,scadenza,tipologia) " +
+		query = "INSERT INTO abbonamento(codiceutente,prezzo,scadenza_abbo,tipologia) " +
 				"VALUES (?, ?, ?, ?)";
 		String tipologia = "";
 		preparato = connessione.prepareStatement(query);
@@ -36,7 +36,7 @@ public class UtenteDao{
 		preparato.setString(4, tipologia);
 		preparato.executeUpdate();
 		
-		query = "INSERT INTO cartadicredito(utente,numerocarta,scadenza,residuo) " +
+		query = "INSERT INTO cartadicredito(codiceutente,numerocarta,scadenza_carta,residuo) " +
 				"VALUES (?, ?, ?, ?)";
 		preparato = connessione.prepareStatement(query);
 		preparato.setInt(1, codice);
@@ -48,7 +48,7 @@ public class UtenteDao{
 
 	
 	public void cancella(int codiceutente) throws SQLException{
-		String query = "DELETE FROM utenti where utenti.codiceutente =?";
+		String query = "DELETE FROM utenti where codiceutente =?";
 		PreparedStatement preparato = connessione.prepareStatement(query);
 		preparato.setInt(1,codiceutente);
 		preparato.executeUpdate();
@@ -104,25 +104,4 @@ public class UtenteDao{
 		else
 			return null;
 	}
-	/*public void getConnection() throws Exception{
-		try{
-			String url = "jdbc:mysql://localhost/database";
-			String user = "root";
-			String pwd = "pass";
-			Connection connessione = DriverManager.getConnection(url,user,pwd);
-			
-			
-			Statement st = connessione.createStatement();
-			String sql = "SELECT * FROM Users";
-			ResultSet rs = st.executeQuery(sql);
-			while(rs.next()){
-				String nome = rs.getString("name");
-				System.out.println(nome);
-			}
-			connessione.close();
-		} catch(SQLException e){
-			System.out.println(e.getMessage());
-		}
-	}*/
-
 }
