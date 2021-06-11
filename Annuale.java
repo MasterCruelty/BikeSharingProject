@@ -8,7 +8,8 @@ public class Annuale extends Abbonamento {
 	
 	//costruttore
 	public Annuale(double prezzo, String scadenza) {
-		super(prezzo = 36, scadenza);
+		super(prezzo, scadenza);
+		super.setPrezzo(36);
 	}
 	
 	public void inizioValidita() {
