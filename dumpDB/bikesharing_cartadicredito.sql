@@ -23,12 +23,12 @@ DROP TABLE IF EXISTS `cartadicredito`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cartadicredito` (
-  `utente` int NOT NULL,
+  `codiceutente` int NOT NULL,
   `numerocarta` int DEFAULT NULL,
-  `scadenza` varchar(7) DEFAULT NULL,
+  `scadenza_carta` varchar(7) DEFAULT NULL,
   `residuo` double DEFAULT NULL,
-  PRIMARY KEY (`utente`),
-  CONSTRAINT `cartautente` FOREIGN KEY (`utente`) REFERENCES `utenti` (`codiceutente`)
+  PRIMARY KEY (`codiceutente`),
+  CONSTRAINT `cartautente` FOREIGN KEY (`codiceutente`) REFERENCES `utenti` (`codiceutente`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='tabella che rappresenta ogni carta di credito legata a ogni utente';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-04 18:30:53
+-- Dump completed on 2021-06-11 20:31:00
