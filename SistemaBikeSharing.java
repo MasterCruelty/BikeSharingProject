@@ -5,10 +5,11 @@ public class SistemaBikeSharing{
 		FinestraRegistrazione registrazione = new FinestraRegistrazione();
 		FinestraAccessoRastrelliera rastrelliera = new FinestraAccessoRastrelliera();
 		FinestraRestituzione restituzione = new FinestraRestituzione();
+		FinestraPrelievoBici prelievobici = new FinestraPrelievoBici();
 		
 		ControlloAccessoSblocco accesso = new ControlloAccessoSblocco();
 		
-		Controller controller = new Controller(avvio, registrazione, rastrelliera, restituzione, accesso);
+		Controller controller = new Controller(avvio, registrazione, rastrelliera, prelievobici, restituzione, accesso);
 
 		avvio.setVisible(true);
 	}

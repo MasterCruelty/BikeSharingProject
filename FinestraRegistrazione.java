@@ -37,6 +37,7 @@ public class FinestraRegistrazione extends JFrame{
 		JPanel pannello = new JPanel();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(600,200);
+		this.setLocationRelativeTo(null);
 		//aggiungo gli attributi componenti sul pannello
 		pannello.add(lbnome);
 		pannello.add(txtnome);
@@ -101,6 +102,30 @@ public class FinestraRegistrazione extends JFrame{
 	*/
 	public void setTxtCarta(String carta){
 		this.txtcarta.setText(carta);
+	}
+	/**
+	* @return txtscadenza
+	*/
+	public String getTxtScadenza(){
+		return this.txtscadenza.getText();
+	}
+	/**
+	* @param scadenza
+	*/
+	public void setTxtScadenza(String scadenza){
+		this.txtscadenza.setText(scadenza);
+	}
+	/**
+	* @return txtabbonamento
+	*/
+	public String getTxtAbbonamento(){
+		return this.txtabbonamento.getText();
+	}
+	/**
+	* @param abbonamento
+	*/
+	public void setTxtAbbonamento(String abbonamento){
+		this.txtabbonamento.setText(abbonamento);
 	}
 	//metodo usato dal controller per intercettare il click sul bottone per confermare i dati inseriti.
 	public void ascoltoInviaDati(ActionListener bottoneInvia){
