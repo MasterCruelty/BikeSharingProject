@@ -10,14 +10,14 @@ public class UtenteDao{
 	static Connection connessione = ConnessioneDB.getConnessione();
 	
 	
-	public void registra(Utente utente, int codice, String password, Abbonamento abbonamento, CartaDiCredito carta) throws SQLException {
+	public void registra(Utente utente, int codice, Abbonamento abbonamento, CartaDiCredito carta) throws SQLException {
 		String query = "INSERT INTO utenti(codiceutente,nome,cognome,password,studente,staff) " + 
 					   "VALUES (?, ?, ?, ?, ?, ?)";
 		PreparedStatement preparato = connessione.prepareStatement(query);
 		preparato.setInt(1, codice);
 		preparato.setString(2, utente.getNome());
 		preparato.setString(3, utente.getCognome());
-		preparato.setString(4, password);
+		preparato.setString(4, utente.getPassword());
 		preparato.setBoolean(5, utente.getStatus());
 		preparato.setBoolean(6, utente.getStaff());
 		preparato.executeUpdate();
@@ -54,6 +54,34 @@ public class UtenteDao{
 		preparato.executeUpdate();
 	}
 	
+	public Utente selectStaff(int codiceutente) throws SQLException{
+		String query = "SELECT * " +
+					   "FROM utenti " +
+					   "WHERE utenti.codiceutente =?";
+		PreparedStatement preparato = connessione.prepareStatement(query);
+		preparato.setInt(1,codiceutente);
+		ResultSet rs = preparato.executeQuery();
+		boolean check = true;
+		String nome, cognome, password;
+		nome = cognome = password = "";
+		boolean studente,staff;
+		studente = staff = false;
+		while(rs.next()){
+			check = true;
+			nome = rs.getString("nome");
+			cognome = rs.getString("cognome");
+			password = rs.getString("password");
+			studente = rs.getBoolean("studente");
+			staff = rs.getBoolean("staff");
+		}
+		if(check = true){
+			Utente utente = new Utente(nome,cognome,password,studente,staff,null,null);
+			return utente;
+		}
+		else{
+			return null;
+		}
+	}
 	
 	public Utente selectUtente(int codiceutente) throws SQLException{
 		String query = "SELECT * " +
@@ -98,7 +126,7 @@ public class UtenteDao{
 			}
 			else
 				abbonamento = new Annuale(prezzo,scadenzaabbo);
-			Utente utente = new Utente(nome,cognome,studente,staff, abbonamento, carta);
+			Utente utente = new Utente(nome,cognome, password, studente,staff, abbonamento, carta);
 			return utente;
 		}
 		else

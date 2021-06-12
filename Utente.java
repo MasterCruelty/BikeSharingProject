@@ -21,9 +21,10 @@ public class Utente {
 	private CartaDiCredito carta;
 	
 	//costruttore
-	public Utente(String nome, String cognome, boolean statusStudente, boolean staff, Abbonamento abbonamento, CartaDiCredito carta) {
+	public Utente(String nome, String cognome, String password, boolean statusStudente, boolean staff, Abbonamento abbonamento, CartaDiCredito carta) {
 		this.nome = nome;
 		this.cognome = cognome;
+		this.password = password;
 		this.statusStudente = statusStudente;
 		this.staff = staff;
 		this.abbonamento = abbonamento;
