@@ -9,16 +9,13 @@ public class Rastrelliera {
 	private int numeroPosti;
 
 	private int numeroRastrelliera;
-
-	private Morsa[] morse;
 	
 	private Bicicletta[] biciclette;
 	
 	//costruttore
-	public Rastrelliera(int numeroPosti, int numeroRastrelliera, Morsa[] morse,Bicicletta[] biciclette) {
+	public Rastrelliera(int numeroPosti, int numeroRastrelliera, Bicicletta[] biciclette) {
 		this.numeroPosti = numeroPosti;
 		this.numeroRastrelliera = numeroRastrelliera;
-		this.morse = morse;
 		this.biciclette = biciclette;
 	}
 
@@ -61,20 +58,6 @@ public class Rastrelliera {
 	*/
 	public void setBiciclette(Bicicletta[] biciclette){
 		this.biciclette = biciclette;
-	}
-	
-	/**
-	* @return morse
-	*/
-	public Morsa[] getMorse(){
-		return this.morse;
-	}
-	
-	/**
-	* @param morse
-	*/
-	public void setMorse(Morsa[] morse){
-		this.morse = morse;
 	}
 	
 	public void rimuoviBicicletta(Rastrelliera rastrelliera, Bicicletta bici){
