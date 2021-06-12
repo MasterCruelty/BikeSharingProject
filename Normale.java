@@ -10,7 +10,8 @@ public class Normale extends Bicicletta {
 	
 	//costruttore
 	public Normale(double tariffa, String orario, boolean mezzoraGratuita) {
-		super(tariffa = 0.50,orario);
+		super(tariffa,orario);
+		super.setTariffa(0.50);
 		this.mezzoraGratuita = mezzoraGratuita;
 	}
 
