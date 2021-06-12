@@ -8,17 +8,17 @@ import java.text.ParseException;
  */
 public class ControlloAccessoSblocco {
 
-	private Utente utente;
+	private Utente utente = null;
 
-	private Bicicletta bici;
-
-	private Rastrelliera rastrelliera;
+	private Rastrelliera rastrelliera = null;
 
 	//costruttore
-	public ControlloAccessoSblocco(Utente utente, Bicicletta bici, Rastrelliera rastrelliera) {
+	public ControlloAccessoSblocco(Utente utente, Rastrelliera rastrelliera) {
 		this.utente = utente;
-		this.bici = bici;
 		this.rastrelliera = rastrelliera;
+	}
+	//2nd costruttore
+	public ControlloAccessoSblocco(){
 	}
 
 	/**
@@ -28,12 +28,9 @@ public class ControlloAccessoSblocco {
 	public double calcolaTariffa(Bicicletta bicicletta) throws ParseException{
 		GregorianCalendar orario_attuale = new GregorianCalendar();
 		String orario_prelievo = bicicletta.getOrarioPrelievo();
-		//orario_prelievo = orario_prelievo.split(":");
-		
+			
 		int ora_attuale = orario_attuale.get(GregorianCalendar.HOUR_OF_DAY);
 		int minuto_attuale = orario_attuale.get(GregorianCalendar.MINUTE);
-		//ora_prelievo = Integer.parseInt(orario_prelievo[0]);
-		//minuto_prelievo = Integer.parseInt(orario_prelievo[1]);
 		
 		SimpleDateFormat formato_ora = new SimpleDateFormat("HH:mm");
 		Date attuale = formato_ora.parse(String.valueOf(ora_attuale) + String.valueOf(minuto_attuale));
@@ -43,8 +40,11 @@ public class ControlloAccessoSblocco {
 		long differenza_minuti = differenza / (60 * 1000);
 		double tariffa = bicicletta.getTariffa();
 		double importo = 0.0;
-		if(differenza_minuti > 30){
+		if(differenza_minuti > 30 && tariffa == 0.50){
 			importo += tariffa;
+		}
+		else if(differenza_minuti > 30){
+			importo += tariffa * 2;
 		}
 		if(differenza_ore > 0){
 			importo+= tariffa * (differenza_ore * 2);
@@ -52,19 +52,23 @@ public class ControlloAccessoSblocco {
 		return importo;
 	}
 	/**
+	* @param tipo_abbonamento
+	* @return boolean
+	*/
+	public boolean controlloDatiRegistrazione(String tipo_abbonamento){
+		if(tipo_abbonamento.equals("Giornaliero") || tipo_abbonamento.equals("Settimanale") || tipo_abbonamento.equals("Annuale")){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	/**
 	 * @return utente
 	 */
 	public Utente getUtente() {
 		return this.utente;
 	}
-
-	/**
-	 * @return bici
-	 */
-	public Bicicletta getBicicletta() {
-		return this.bici;
-	}
-
 	/**
 	 * @return rastrelliera
 	 */
@@ -75,32 +79,21 @@ public class ControlloAccessoSblocco {
 	/**
 	 * @param nome 
 	 * @param cognome 
+	 * @param password
 	 * @param statusStudente 
 	 * @param staff
 	 */
-	public void setUtente(String nome, String cognome, boolean statusStudente, boolean staff) {
-		this.utente.setNome(nome);
-		this.utente.setCognome(cognome);
-		this.utente.setStatus(statusStudente);
-		this.utente.setStaff(staff);
+	public void setUtente(String nome, String cognome, String password, boolean statusStudente, boolean staff, Abbonamento abbonamento, CartaDiCredito carta) {
+		this.utente = new Utente(nome,cognome,password, statusStudente,staff,abbonamento,carta);
 	}
-
-	/**
-	 * @param tariffa 
-	 * @param orarioPrelievo 
-	 */
-	public void setBicicletta(double tariffa, String orarioPrelievo) {
-		this.bici.setTariffa(tariffa);
-		this.bici.setOrarioPrelievo(orarioPrelievo);
-	}
-
 	/**
 	 * @param posti 
 	 * @param numeroRastrelliera 
 	 */
-	public void setRastrelliera(int posti, int numeroRastrelliera) {
+	public void setRastrelliera(int posti, int numeroRastrelliera,Bicicletta[] biciclette) {
 		this.rastrelliera.setNumeroPosti(posti);
 		this.rastrelliera.setNumeroRastrelliera(numeroRastrelliera);
+		this.rastrelliera.setBiciclette(biciclette);
 	}
 
 }
