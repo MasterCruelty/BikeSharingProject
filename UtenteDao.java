@@ -61,7 +61,7 @@ public class UtenteDao{
 		PreparedStatement preparato = connessione.prepareStatement(query);
 		preparato.setInt(1,codiceutente);
 		ResultSet rs = preparato.executeQuery();
-		boolean check = true;
+		boolean check = false;
 		String nome, cognome, password;
 		nome = cognome = password = "";
 		boolean studente,staff;
@@ -74,20 +74,19 @@ public class UtenteDao{
 			studente = rs.getBoolean("studente");
 			staff = rs.getBoolean("staff");
 		}
-		if(check = true){
+		if(check == true){
 			Utente utente = new Utente(nome,cognome,password,studente,staff,null,null);
 			return utente;
 		}
-		else{
+		else
 			return null;
-		}
 	}
 	
 	public Utente selectUtente(int codiceutente) throws SQLException{
 		String query = "SELECT * " +
 					   "FROM utenti " +
-					   "JOIN abbonamento ON utenti.codiceutente = abbonamento.utente" +
-					   "JOIN cartadicredito ON utenti.codiceutente = cartadicredito.utente" +
+					   "JOIN abbonamento ON utenti.codiceutente = abbonamento.codiceutente " +
+					   "JOIN cartadicredito ON utenti.codiceutente = cartadicredito.codiceutente " +
 					   "WHERE utenti.codiceutente =?";
 		PreparedStatement preparato = connessione.prepareStatement(query);
 		preparato.setInt(1,codiceutente);
