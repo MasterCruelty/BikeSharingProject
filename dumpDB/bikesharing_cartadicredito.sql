@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `cartadicredito`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cartadicredito` (
   `codiceutente` int NOT NULL,
-  `numerocarta` int DEFAULT NULL,
+  `numerocarta` bigint DEFAULT NULL,
   `scadenza_carta` varchar(7) DEFAULT NULL,
   `residuo` double DEFAULT NULL,
   PRIMARY KEY (`codiceutente`),
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-11 20:31:00
+-- Dump completed on 2021-06-12 17:52:21
