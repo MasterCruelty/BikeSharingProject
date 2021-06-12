@@ -2,7 +2,9 @@ import java.util.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-
+/**
+* classe che rappresenta l'interfaccia grafica del menù principale all'avvio dell'applicazione.
+*/
 public class FinestraAvvio extends JFrame{
 
 	//attributi componenti della finestra
@@ -21,6 +23,7 @@ public class FinestraAvvio extends JFrame{
 		JPanel pannello = new JPanel();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(600,200);
+		this.setLocationRelativeTo(null);
 		//aggiungo gli attributi componenti sul pannello
 		pannello.add(titolo);
 		pannello.add(registrazione);
