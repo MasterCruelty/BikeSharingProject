@@ -40,7 +40,7 @@ public class UtenteDao{
 				"VALUES (?, ?, ?, ?)";
 		preparato = connessione.prepareStatement(query);
 		preparato.setInt(1, codice);
-		preparato.setInt(2, carta.getNumero());
+		preparato.setLong(2, carta.getNumero());
 		preparato.setString(3, carta.getScadenza());
 		preparato.setDouble(4,carta.getResiduo());
 		preparato.executeUpdate();

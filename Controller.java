@@ -45,7 +45,7 @@ public class Controller {
 			String nome = registrazione.getTxtNome();
 			String cognome = registrazione.getTxtCognome();
 			String password = registrazione.getTxtPassword();
-			int numero_carta = Integer.parseInt(registrazione.getTxtCarta());
+			long numero_carta = Long.parseLong(registrazione.getTxtCarta());
 			String scadenza_carta = registrazione.getTxtScadenza();
 			String tipo_abbonamento = registrazione.getTxtAbbonamento();
 			CartaDiCredito carta = new CartaDiCredito(numero_carta,scadenza_carta,1000);
@@ -60,8 +60,8 @@ public class Controller {
 				abbonamento = new Annuale(0,"");
 			}
 			//creo un oggetto di tipo utente da dare come argomento alla classe DAO per l'inserimento dei dati su database. 
-			Utente utente = new Utente(nome, cognome, false,false, null, carta);
-			utente.acquista(abbonamento);
+			accesso.setUtente(nome,cognome,false,false,null,carta);
+			accesso.getUtente().acquista(abbonamento);
 			//ri-setto vuote le caselle di testo della interfaccia grafica.
 			registrazione.setTxtNome("");
 			registrazione.setTxtCognome("");
@@ -80,15 +80,15 @@ public class Controller {
 			int massimo = 99999;
 			int codice_utente = (int)Math.floor(Math.random()*(massimo-minimo+1));
 			try{
-				dao.registra(utente,codice_utente,password,abbonamento,carta);
+				dao.registra(accesso.getUtente(),codice_utente,password,accesso.getUtente().getAbbonamento(),accesso.getUtente().getCarta());
 			}
 			catch(SQLException e){
 				e.printStackTrace();
 			}
 			//restituisco la conferma della registrazione e visualizzo il codice utente generato e il pagamento effettuato.
 			JOptionPane.showMessageDialog(null,"Registrazione confermata!\n Ecco il tuo codice utente personale: " + codice_utente + 
-											   "\nHai pagato: " + utente.getAbbonamento().getPrezzo() + 
-											   "\nResiduo su carta: " + utente.getCarta().getResiduo());
+											   "\nHai pagato: " + accesso.getUtente().getAbbonamento().getPrezzo() + 
+											   "\nResiduo su carta: " + accesso.getUtente().getCarta().getResiduo());
 			registrazione.setVisible(false);
 			avvio.setVisible(true);
 		}

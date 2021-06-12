@@ -6,7 +6,7 @@ public class SistemaBikeSharing{
 		FinestraAccessoRastrelliera rastrelliera = new FinestraAccessoRastrelliera();
 		FinestraRestituzione restituzione = new FinestraRestituzione();
 		
-		ControlloAccessoSblocco accesso = null;
+		ControlloAccessoSblocco accesso = new ControlloAccessoSblocco();
 		
 		Controller controller = new Controller(avvio, registrazione, rastrelliera, restituzione, accesso);
 

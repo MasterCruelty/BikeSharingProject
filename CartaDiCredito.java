@@ -7,14 +7,14 @@ import java.text.DateFormat;
  */
 public class CartaDiCredito {
 
-	private int numeroCarta; //il numero della carta di credito.
+	private long numeroCarta; //il numero della carta di credito.
 
 	private String scadenza;   //la scadenza riportata sulla carta di credito.
 	
 	private double residuo;  //il denaro residuo prelevabile dalla carta di credito.
 
 	//costruttore
-	public CartaDiCredito(int numeroCarta, String scadenza, double residuo) {
+	public CartaDiCredito(long numeroCarta, String scadenza, double residuo) {
 		this.numeroCarta = numeroCarta;
 		this.scadenza = scadenza;
 		this.residuo = residuo;
@@ -23,7 +23,7 @@ public class CartaDiCredito {
 	/**
 	 * @return numeroCarta
 	 */
-	public int getNumero() {
+	public long getNumero() {
 		return this.numeroCarta;
 	}
 
@@ -44,7 +44,7 @@ public class CartaDiCredito {
 	/**
 	 * @param numeroCarta
 	 */
-	public void setNumero(int numeroCarta) {
+	public void setNumero(long numeroCarta) {
 		this.numeroCarta = numeroCarta;
 	}
 
