@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 import java.sql.SQLException;
 
 /**
- * 
+ * Classe che rappresenta il controller nel pattern MVC. 
  */
 public class Controller {
 
@@ -20,34 +20,54 @@ public class Controller {
 
 	//View 4
 	private FinestraAccessoRastrelliera rastrelliera;
+	
+	//View 5
+	private FinestraPrelievoBici prelievobici;
 
 	//Model
 	private ControlloAccessoSblocco accesso;
 	
-	public Controller(FinestraAvvio avvio, FinestraRegistrazione registrazione, FinestraAccessoRastrelliera rastrelliera, FinestraRestituzione restituzione, ControlloAccessoSblocco accesso){
+	//costruttore
+	public Controller(FinestraAvvio avvio, FinestraRegistrazione registrazione, FinestraAccessoRastrelliera rastrelliera, FinestraPrelievoBici prelievobici, FinestraRestituzione restituzione, ControlloAccessoSblocco accesso){
 		this.avvio = avvio;
 		this.accesso = accesso;
 		this.registrazione = registrazione;
+		this.rastrelliera = rastrelliera;
+		this.prelievobici = prelievobici;
 		this.avvio.ascoltoRegistrazione(new RegistrazioneAscolto());
-		this.registrazione.ascoltoInviaDati(new confermaDatiAscolto());
+		this.avvio.ascoltoRastrelliera(new RastrellieraAscolto());
+		this.registrazione.ascoltoInviaDati(new ConfermaDatiAscolto());
+		this.rastrelliera.ascoltoAccesso(new ConfermaAccessoAscolto());
+		this.prelievobici.ascoltoNormale(new NormaleAscolto());
 		this.accesso = accesso;
 	}
 	
 	public class RegistrazioneAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			registrazione.setVisible(true);
-			JOptionPane.showMessageDialog(null,"Registrazione cliccata");
+			JOptionPane.showMessageDialog(null,"Inserire i dati richiesti per effettuare la registrazione");
 		}
 	}
 	
-	public class confermaDatiAscolto implements ActionListener{
+	public class ConfermaDatiAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			String nome = registrazione.getTxtNome();
 			String cognome = registrazione.getTxtCognome();
 			String password = registrazione.getTxtPassword();
 			long numero_carta = Long.parseLong(registrazione.getTxtCarta());
 			String scadenza_carta = registrazione.getTxtScadenza();
-			String tipo_abbonamento = registrazione.getTxtAbbonamento();
+			String tipo_abbonamento = "";
+			while(true){
+				tipo_abbonamento = registrazione.getTxtAbbonamento();
+				if(!accesso.controlloDatiRegistrazione(tipo_abbonamento)){
+					JOptionPane.showMessageDialog(null,"Formato errato!\nEsempi inserimento:\n"+
+												       "scadenza_carta: mm/yyyy\nTipo Abbonamento: Giornaliero/Settimanale/Annuale.");
+					return;
+				}
+				else{
+					break;
+				}
+			}
 			CartaDiCredito carta = new CartaDiCredito(numero_carta,scadenza_carta,1000);
 			Abbonamento abbonamento;
 			if(tipo_abbonamento.equals("Settimanale")){
@@ -60,7 +80,7 @@ public class Controller {
 				abbonamento = new Annuale(0,"");
 			}
 			//creo un oggetto di tipo utente da dare come argomento alla classe DAO per l'inserimento dei dati su database. 
-			accesso.setUtente(nome,cognome,false,false,null,carta);
+			accesso.setUtente(nome,cognome, password, false,false,null,carta);
 			accesso.getUtente().acquista(abbonamento);
 			//ri-setto vuote le caselle di testo della interfaccia grafica.
 			registrazione.setTxtNome("");
@@ -69,7 +89,7 @@ public class Controller {
 			registrazione.setTxtCarta("");
 			registrazione.setTxtScadenza("");
 			registrazione.setTxtAbbonamento("");
-			JOptionPane.showMessageDialog(null,"Conferma dati registrazione cliccato\n"+"nome inserito: " + nome +
+			JOptionPane.showMessageDialog(null,"Dati registrazione confermati:\n"+"nome inserito: " + nome +
 												"\ncognome inserito: " + cognome+"\nnumero carta inserita: " + numero_carta+
 												"\npassword inserita: " + password + "\nscadenza carta inserita: " + scadenza_carta +
 												"\nabbonamento scelto: " + tipo_abbonamento);
@@ -80,7 +100,7 @@ public class Controller {
 			int massimo = 99999;
 			int codice_utente = (int)Math.floor(Math.random()*(massimo-minimo+1));
 			try{
-				dao.registra(accesso.getUtente(),codice_utente,password,accesso.getUtente().getAbbonamento(),accesso.getUtente().getCarta());
+				dao.registra(accesso.getUtente(),codice_utente,accesso.getUtente().getAbbonamento(),accesso.getUtente().getCarta());
 			}
 			catch(SQLException e){
 				e.printStackTrace();
@@ -91,6 +111,101 @@ public class Controller {
 											   "\nResiduo su carta: " + accesso.getUtente().getCarta().getResiduo());
 			registrazione.setVisible(false);
 			avvio.setVisible(true);
+		}
+	}
+	
+	public class RastrellieraAscolto implements ActionListener{
+		public void actionPerformed(ActionEvent arg0){
+			rastrelliera.setVisible(true);
+			JOptionPane.showMessageDialog(null, "Inserire le vostre credenziali per effettuare l'accesso.");
+		}
+	}
+	
+	public class ConfermaAccessoAscolto implements ActionListener{
+		public void actionPerformed(ActionEvent arg0){
+			int codice = Integer.parseInt(rastrelliera.getTxtCodice());
+			String password = rastrelliera.getTxtPassword();
+			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
+			UtenteDao dao = new UtenteDao();
+			Utente utente = null;
+			Utente staff = null;
+			try{
+				utente = dao.selectUtente(codice);
+				staff = dao.selectStaff(codice);
+			}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+			if(utente == null){
+				if(staff == null){
+					JOptionPane.showMessageDialog(null, "Codice utente non esistente.");
+				}
+				else{
+					if(staff.getPassword().equals(password)){
+						JOptionPane.showMessageDialog(null, "Accesso staff eseguito.");
+						rastrelliera.setVisible(false);
+						prelievobici.setTxtButtons();
+						prelievobici.setVisible(true);
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Password errata.");
+					}
+				}
+			}
+			else{
+				if(utente.getPassword().equals(password)){
+					JOptionPane.showMessageDialog(null, "Accesso eseguito.");
+					rastrelliera.setVisible(false);
+					prelievobici.setVisible(true);
+					
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Password errata.");
+				}
+			}
+		}
+	}
+	
+	public class NormaleAscolto implements ActionListener{
+		public void actionPerformed(ActionEvent arg0){
+			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
+			int codice_utente = Integer.parseInt(rastrelliera.getTxtCodice());
+			RastrellieraDao dao = new RastrellieraDao();
+			Rastrelliera rastrelliera = null;
+			try{
+				rastrelliera = dao.selectRastrelliera(numero_rastrelliera);
+			}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+			if(rastrelliera == null){
+				JOptionPane.showMessageDialog(null,"Numero rastrelliera non esistente.");
+				return;
+			}
+			Bicicletta[] bicicletta = rastrelliera.getBiciclette();
+			boolean check = false;
+			String orarioprelievo = "";
+			for(int i = 0; i <= bicicletta.length;i++){
+				if(bicicletta[i].getTariffa() == 0.50 && bicicletta[i].getOrarioPrelievo().equals("")){
+					GregorianCalendar orario_attuale = new GregorianCalendar();
+					int ora_attuale = orario_attuale.get(GregorianCalendar.HOUR_OF_DAY);
+					int minuto_attuale = orario_attuale.get(GregorianCalendar.MINUTE);
+					orarioprelievo = (String.valueOf(ora_attuale) + ":" + String.valueOf(minuto_attuale));
+					bicicletta[i].setOrarioPrelievo(orarioprelievo);
+					check = true;
+					break;
+				}
+			}
+			String tipologia = "normale";
+			if(check == true){
+				try{
+					dao.updateRastrelliera(tipologia,codice_utente,numero_rastrelliera,orarioprelievo);
+				}
+				catch(SQLException e){
+					e.printStackTrace();
+				}
+			}
+			
 		}
 	}
 }
