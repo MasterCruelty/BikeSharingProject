@@ -10,7 +10,7 @@ public class Elettrica extends Bicicletta {
 	//costruttore
 	public Elettrica(double tariffa,String orario, boolean seggiolino) {
 		super(tariffa,orario);
-		super.setTariffa(1.50);
+		this.setTariffa(1.50);
 		this.seggiolino = seggiolino;
 	}
 	/**

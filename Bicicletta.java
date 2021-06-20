@@ -6,7 +6,7 @@ import java.util.*;
  */
 public abstract class Bicicletta {
 
-	private static double tariffa;
+	private double tariffa;
 
 	private String orarioPrelievo;
 	
