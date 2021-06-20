@@ -28,7 +28,7 @@ public class RastrellieraDao {
 		double tariffa = 0.0;
 		String tipologia = "";
 		String orarioprelievo = "";
-		Bicicletta[] biciclette = null;
+		Bicicletta[] biciclette = new Bicicletta[5];
 		while(rs.next()){
 			check = true;
 			numeroposti = rs.getInt("postidisponibili");
@@ -44,6 +44,7 @@ public class RastrellieraDao {
 			else if(tipologia.equals("elettrica")){
 				biciclette[i] = new Elettrica(tariffa,orarioprelievo,seggiolino);
 			}
+			i++;
 		}
 		if(check == true){
 			Rastrelliera rastrelliera = new Rastrelliera(numeroposti,numerorastrelliera, biciclette);
@@ -56,16 +57,17 @@ public class RastrellieraDao {
 	
 	public void updateRastrelliera(String tipologia,int codiceutente,int numerorastrelliera,String orarioprelievo) throws SQLException{
 		String query = "UPDATE bicicletta "  +
-					   "JOIN rastrelliera ON bicicletta.bicirastrelliera =? " +
 					   "SET biciutente=?, orarioprelievo =? "  +
 					   "WHERE tipologia=? " +
-					   "AND biciutente IS NULL" +
-					   "LIMIT 1";
+					   "AND biciutente IS NULL " +
+					   "AND orarioprelievo IS NULL " +
+					   "AND bicicletta.bicirastrelliera=? "+
+					   "LIMIT 1 ";
 		PreparedStatement preparato = connessione.prepareStatement(query);
-		preparato.setInt(1,numerorastrelliera);
-		preparato.setInt(2,codiceutente);
-		preparato.setString(3,orarioprelievo);
-		preparato.setString(4,tipologia);
+		preparato.setInt(1,codiceutente);
+		preparato.setString(2,orarioprelievo);
+		preparato.setString(3,tipologia);
+		preparato.setInt(4,numerorastrelliera);
 		preparato.executeUpdate();
 	}
 }
