@@ -103,6 +103,12 @@ public class Controller {
 			int codice_utente = (int)Math.floor(Math.random()*(massimo-minimo+1));
 			try{
 				dao.registra(accesso.getUtente(),codice_utente,accesso.getUtente().getAbbonamento(),accesso.getUtente().getCarta());
+				if(accesso.getUtente().getAbbonamento() instanceof Annuale){
+					accesso.getUtente().getAbbonamento().inizioValidita();
+					String scadenza = accesso.getUtente().getAbbonamento().getScadenza();
+					dao.updateScadenzaAbbonamento(codice_utente,scadenza);
+					JOptionPane.showMessageDialog(null, "Abbonamento attivato!\nIl tuo abbonamento risulta valido fino a " + scadenza);
+				}
 			}
 			catch(SQLException e){
 				e.printStackTrace();
@@ -119,6 +125,7 @@ public class Controller {
 	public class RastrellieraAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			rastrelliera.setVisible(true);
+			avvio.setVisible(false);
 			JOptionPane.showMessageDialog(null, "Inserire le vostre credenziali per effettuare l'accesso.");
 		}
 	}
@@ -128,10 +135,12 @@ public class Controller {
 			int codice = Integer.parseInt(rastrelliera.getTxtCodice());
 			String password = rastrelliera.getTxtPassword();
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
+			//istanzio la classe dao per l'imminente select e ottenere i dati dell'utente dal codice utente inserito.
 			UtenteDao dao = new UtenteDao();
 			Utente utente = null;
 			Utente staff = null;
 			try{
+				//due select differenti e due oggetti differenti per staff e utente 
 				utente = dao.selectUtente(codice);
 				staff = dao.selectStaff(codice);
 			}
@@ -143,6 +152,8 @@ public class Controller {
 					JOptionPane.showMessageDialog(null, "Codice utente non esistente.");
 				}
 				else{
+					//setto l'utente come staff dai dati ottenuti tramite la select dal db
+					//controllo se la password inserita per lo staff matcha con la password salvata sul database per il codice utente inserito.
 					accesso.setUtente(staff.getNome(),staff.getCognome(),staff.getPassword(),staff.getStatus(),staff.getStaff(),null,null);
 					if(accesso.getUtente().getPassword().equals(password)){
 						JOptionPane.showMessageDialog(null, "Accesso staff eseguito.");
@@ -156,10 +167,35 @@ public class Controller {
 				}
 			}
 			else{
+				//setto l'utente tramite i dati ottenuti dalla select dal db
+				//controllo se la password inserita matcha con la password salvata sul database per il codice utente inserito.
 				accesso.setUtente(utente.getNome(),utente.getCognome(),utente.getPassword(),utente.getStatus(),utente.getStaff(),utente.getAbbonamento(),utente.getCarta());
 				if(accesso.getUtente().getPassword().equals(password)){
+					RastrellieraDao rastredao = new RastrellieraDao();
+					Rastrelliera rastre = null;
+					try{
+						rastre = rastredao.selectRastrelliera(numero_rastrelliera);
+					}
+					catch(SQLException e){
+						e.printStackTrace();
+					}
+					if(rastre == null){
+						JOptionPane.showMessageDialog(null,"Numero rastrelliera non esistente.");
+						return;
+					}
 					JOptionPane.showMessageDialog(null, "Accesso eseguito.");
 					rastrelliera.setVisible(false);
+					if((accesso.getUtente().getAbbonamento() instanceof Occasionale) && accesso.getUtente().getAbbonamento().getScadenza().equals("")){
+						accesso.getUtente().getAbbonamento().inizioValidita();
+						String scadenza = accesso.getUtente().getAbbonamento().getScadenza();
+						try{
+							dao.updateScadenzaAbbonamento(codice,scadenza);
+						}
+						catch(SQLException e){
+							e.printStackTrace();
+						}
+						JOptionPane.showMessageDialog(null, "Abbonamento attivato!\nIl tuo abbonamento risulta valido fino a " + scadenza);
+					}
 					prelievobici.setVisible(true);
 					
 				}
@@ -174,23 +210,23 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0){
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
 			int codice_utente = Integer.parseInt(rastrelliera.getTxtCodice());
+			//istanzio la classe dao per ottenere successivamente i dati della rastrelliera alla quale si vuole accedere.
 			RastrellieraDao dao = new RastrellieraDao();
-			Rastrelliera rastrelliera = null;
+			Rastrelliera rastre = null;
 			try{
-				rastrelliera = dao.selectRastrelliera(numero_rastrelliera);
+				rastre = dao.selectRastrelliera(numero_rastrelliera);
+				//controllo se l'utente non stia già noleggiando una bicicletta.
 				if(dao.controlloNoleggio(codice_utente)){
 					JOptionPane.showMessageDialog(null,"Stai gia' noleggiando una bicicletta!");
+					prelievobici.setVisible(false);
+					avvio.setVisible(true);
 					return;
 				}
 			}
 			catch(SQLException e){
 				e.printStackTrace();
 			}
-			if(rastrelliera == null){
-				JOptionPane.showMessageDialog(null,"Numero rastrelliera non esistente.");
-				return;
-			}
-			accesso.setRastrelliera(rastrelliera.getNumeroPosti(),rastrelliera.getNumeroRastrelliera(),rastrelliera.getBiciclette());
+			accesso.setRastrelliera(rastre.getNumeroPosti(),rastre.getNumeroRastrelliera(),rastre.getBiciclette());
 			boolean check = false;
 			String orarioprelievo = "";
 			Bicicletta[] bicicletta = accesso.getRastrelliera().getBiciclette();
@@ -213,6 +249,8 @@ public class Controller {
 					rastrelliera.setTxtCodice("");
 					rastrelliera.setTxtRastrelliera("");
 					rastrelliera.setTxtPassword("");
+					prelievobici.setVisible(false);
+					avvio.setVisible(true);
 				}
 				catch(SQLException e){
 					e.printStackTrace();
@@ -220,6 +258,8 @@ public class Controller {
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Non ci sono biciclette normali disponibili su questa rastrelliera.");
+				prelievobici.setVisible(false);
+				avvio.setVisible(true);
 			}
 		}
 	}
@@ -229,22 +269,20 @@ public class Controller {
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
 			int codice_utente = Integer.parseInt(rastrelliera.getTxtCodice());
 			RastrellieraDao dao = new RastrellieraDao();
-			Rastrelliera rastrelliera = null;
+			Rastrelliera rastre = null;
 			try{
-				rastrelliera = dao.selectRastrelliera(numero_rastrelliera);
+				rastre = dao.selectRastrelliera(numero_rastrelliera);
 				if(dao.controlloNoleggio(codice_utente)){
 					JOptionPane.showMessageDialog(null,"Stai gia' noleggiando una bicicletta!");
+					prelievobici.setVisible(false);
+					avvio.setVisible(true);
 					return;
 				}
 			}
 			catch(SQLException e){
 				e.printStackTrace();
 			}
-			if(rastrelliera == null){
-				JOptionPane.showMessageDialog(null,"Numero rastrelliera non esistente.");
-				return;
-			}
-			accesso.setRastrelliera(rastrelliera.getNumeroPosti(),rastrelliera.getNumeroRastrelliera(),rastrelliera.getBiciclette());
+			accesso.setRastrelliera(rastre.getNumeroPosti(),rastre.getNumeroRastrelliera(),rastre.getBiciclette());
 			boolean check = false;
 			String orarioprelievo = "";
 			Bicicletta[] bicicletta = accesso.getRastrelliera().getBiciclette();
@@ -267,6 +305,8 @@ public class Controller {
 					rastrelliera.setTxtCodice("");
 					rastrelliera.setTxtRastrelliera("");
 					rastrelliera.setTxtPassword("");
+					prelievobici.setVisible(false);
+					avvio.setVisible(true);
 				}
 				catch(SQLException e){
 					e.printStackTrace();
@@ -274,6 +314,8 @@ public class Controller {
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Non ci sono biciclette normali disponibili su questa rastrelliera.");
+				prelievobici.setVisible(false);
+				avvio.setVisible(true);
 			}
 		}
 	}
@@ -283,22 +325,20 @@ public class Controller {
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
 			int codice_utente = Integer.parseInt(rastrelliera.getTxtCodice());
 			RastrellieraDao dao = new RastrellieraDao();
-			Rastrelliera rastrelliera = null;
+			Rastrelliera rastre = null;
 			try{
-				rastrelliera = dao.selectRastrelliera(numero_rastrelliera);
+				rastre = dao.selectRastrelliera(numero_rastrelliera);
 				if(dao.controlloNoleggio(codice_utente)){
 					JOptionPane.showMessageDialog(null,"Stai gia' noleggiando una bicicletta!");
+					prelievobici.setVisible(false);
+					avvio.setVisible(true);
 					return;
 				}
 			}
 			catch(SQLException e){
 				e.printStackTrace();
 			}
-			if(rastrelliera == null){
-				JOptionPane.showMessageDialog(null,"Numero rastrelliera non esistente.");
-				return;
-			}
-			accesso.setRastrelliera(rastrelliera.getNumeroPosti(),rastrelliera.getNumeroRastrelliera(),rastrelliera.getBiciclette());
+			accesso.setRastrelliera(rastre.getNumeroPosti(),rastre.getNumeroRastrelliera(),rastre.getBiciclette());
 			boolean check = false;
 			String orarioprelievo = "";
 			Bicicletta[] bicicletta = accesso.getRastrelliera().getBiciclette();
@@ -323,6 +363,8 @@ public class Controller {
 					rastrelliera.setTxtCodice("");
 					rastrelliera.setTxtRastrelliera("");
 					rastrelliera.setTxtPassword("");
+					prelievobici.setVisible(false);
+					avvio.setVisible(true);
 				}
 				catch(SQLException e){
 					e.printStackTrace();
@@ -330,6 +372,8 @@ public class Controller {
 			}
 			else{
 				JOptionPane.showMessageDialog(null, "Non ci sono biciclette normali disponibili su questa rastrelliera.");
+				prelievobici.setVisible(false);
+				avvio.setVisible(true);
 			}
 		}
 	}
