@@ -25,12 +25,14 @@ public class FinestraPrelievoBici extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(600,200);
 		this.setLocationRelativeTo(null);
+		//aggiungo gli attributi componenti sul pannello
 		pannello.add(lbnormale);
 		pannello.add(btnormale);
 		pannello.add(lbelettrica);
 		pannello.add(btelettrica);
 		pannello.add(lbseggiolino);
 		pannello.add(btseggiolino);
+		//aggiungo il pannello con i suoi componenti alla finestra
 		this.add(pannello);
 	}
 	
@@ -38,5 +40,17 @@ public class FinestraPrelievoBici extends JFrame {
 		this.btnormale.setText("Sposta");
 		this.btelettrica.setText("Sposta");
 		this.btseggiolino.setText("Sposta");
+	}
+	//metodo usato dal controller per intercettare il click sul bottone btnormale.
+	public void ascoltoNormale(ActionListener bottoneNormale){
+		btnormale.addActionListener(bottoneNormale);
+	}
+	//metodo usato dal controller per intercettare il click sul bottone btelettrica.
+	public void ascoltoElettrica(ActionListener bottoneElettrica){
+		btelettrica.addActionListener(bottoneElettrica);
+	}
+	//metodo usato dal controller per intercettare il click sul bottone btseggiolino.
+	public void ascoltoSeggiolino(ActionListener bottoneSeggiolino){
+		btseggiolino.addActionListener(bottoneSeggiolino);
 	}
 }

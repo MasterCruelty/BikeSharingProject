@@ -55,19 +55,39 @@ public class RastrellieraDao {
 		}
 	}
 	
-	public void updateRastrelliera(String tipologia,int codiceutente,int numerorastrelliera,String orarioprelievo) throws SQLException{
+	public boolean controlloNoleggio(int codice) throws SQLException{
+		String query = "SELECT biciutente " +
+					   "FROM bicicletta " +
+					   "WHERE biciutente IS NOT NULL";
+		PreparedStatement preparato = connessione.prepareStatement(query);
+		ResultSet rs = preparato.executeQuery();
+		boolean check = false;
+		int biciutente = 0;
+		while(rs.next()){
+			check = true;
+			biciutente = rs.getInt("biciutente");
+			if(biciutente == codice){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void updateRastrelliera(String tipologia,int codiceutente,int numerorastrelliera,String orarioprelievo,boolean seggiolino) throws SQLException{
 		String query = "UPDATE bicicletta "  +
 					   "SET biciutente=?, orarioprelievo =? "  +
 					   "WHERE tipologia=? " +
 					   "AND biciutente IS NULL " +
 					   "AND orarioprelievo IS NULL " +
-					   "AND bicicletta.bicirastrelliera=? "+
+					   "AND bicicletta.bicirastrelliera=? " +
+					   "AND seggiolino=? " +
 					   "LIMIT 1 ";
 		PreparedStatement preparato = connessione.prepareStatement(query);
 		preparato.setInt(1,codiceutente);
 		preparato.setString(2,orarioprelievo);
 		preparato.setString(3,tipologia);
 		preparato.setInt(4,numerorastrelliera);
+		preparato.setBoolean(5,seggiolino);
 		preparato.executeUpdate();
 	}
 }

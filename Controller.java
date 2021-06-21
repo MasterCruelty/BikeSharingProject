@@ -39,6 +39,8 @@ public class Controller {
 		this.registrazione.ascoltoInviaDati(new ConfermaDatiAscolto());
 		this.rastrelliera.ascoltoAccesso(new ConfermaAccessoAscolto());
 		this.prelievobici.ascoltoNormale(new NormaleAscolto());
+		this.prelievobici.ascoltoElettrica(new ElettricaAscolto());
+		this.prelievobici.ascoltoSeggiolino(new SeggiolinoAscolto());
 		this.accesso = accesso;
 	}
 	
@@ -141,7 +143,8 @@ public class Controller {
 					JOptionPane.showMessageDialog(null, "Codice utente non esistente.");
 				}
 				else{
-					if(staff.getPassword().equals(password)){
+					accesso.setUtente(staff.getNome(),staff.getCognome(),staff.getPassword(),staff.getStatus(),staff.getStaff(),null,null);
+					if(accesso.getUtente().getPassword().equals(password)){
 						JOptionPane.showMessageDialog(null, "Accesso staff eseguito.");
 						rastrelliera.setVisible(false);
 						prelievobici.setTxtButtons();
@@ -153,7 +156,8 @@ public class Controller {
 				}
 			}
 			else{
-				if(utente.getPassword().equals(password)){
+				accesso.setUtente(utente.getNome(),utente.getCognome(),utente.getPassword(),utente.getStatus(),utente.getStaff(),utente.getAbbonamento(),utente.getCarta());
+				if(accesso.getUtente().getPassword().equals(password)){
 					JOptionPane.showMessageDialog(null, "Accesso eseguito.");
 					rastrelliera.setVisible(false);
 					prelievobici.setVisible(true);
@@ -174,6 +178,10 @@ public class Controller {
 			Rastrelliera rastrelliera = null;
 			try{
 				rastrelliera = dao.selectRastrelliera(numero_rastrelliera);
+				if(dao.controlloNoleggio(codice_utente)){
+					JOptionPane.showMessageDialog(null,"Stai gia' noleggiando una bicicletta!");
+					return;
+				}
 			}
 			catch(SQLException e){
 				e.printStackTrace();
@@ -182,11 +190,12 @@ public class Controller {
 				JOptionPane.showMessageDialog(null,"Numero rastrelliera non esistente.");
 				return;
 			}
-			Bicicletta[] bicicletta = rastrelliera.getBiciclette();
+			accesso.setRastrelliera(rastrelliera.getNumeroPosti(),rastrelliera.getNumeroRastrelliera(),rastrelliera.getBiciclette());
 			boolean check = false;
 			String orarioprelievo = "";
-			for(int i = 0; i <= bicicletta.length;i++){
-				if(bicicletta[i].getTariffa() == 0.50 && bicicletta[i].getOrarioPrelievo().equals("")){
+			Bicicletta[] bicicletta = accesso.getRastrelliera().getBiciclette();
+			for(int i = 0; i < bicicletta.length; i++){
+				if(bicicletta[i].getTariffa() == 0.5 && bicicletta[i].getOrarioPrelievo().equals("")){
 					GregorianCalendar orario_attuale = new GregorianCalendar();
 					int ora_attuale = orario_attuale.get(GregorianCalendar.HOUR_OF_DAY);
 					int minuto_attuale = orario_attuale.get(GregorianCalendar.MINUTE);
@@ -199,13 +208,129 @@ public class Controller {
 			String tipologia = "normale";
 			if(check == true){
 				try{
-					dao.updateRastrelliera(tipologia,codice_utente,numero_rastrelliera,orarioprelievo);
+					dao.updateRastrelliera(tipologia,codice_utente,numero_rastrelliera,orarioprelievo,false);
+					JOptionPane.showMessageDialog(null, "Operazione di noleggio riuscita!\nHai noleggiato una bicicletta normale.\nMorsa sbloccata!");
+					rastrelliera.setTxtCodice("");
+					rastrelliera.setTxtRastrelliera("");
+					rastrelliera.setTxtPassword("");
 				}
 				catch(SQLException e){
 					e.printStackTrace();
 				}
 			}
-			
+			else{
+				JOptionPane.showMessageDialog(null, "Non ci sono biciclette normali disponibili su questa rastrelliera.");
+			}
+		}
+	}
+	
+	public class ElettricaAscolto implements ActionListener{
+		public void actionPerformed(ActionEvent arg0){
+			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
+			int codice_utente = Integer.parseInt(rastrelliera.getTxtCodice());
+			RastrellieraDao dao = new RastrellieraDao();
+			Rastrelliera rastrelliera = null;
+			try{
+				rastrelliera = dao.selectRastrelliera(numero_rastrelliera);
+				if(dao.controlloNoleggio(codice_utente)){
+					JOptionPane.showMessageDialog(null,"Stai gia' noleggiando una bicicletta!");
+					return;
+				}
+			}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+			if(rastrelliera == null){
+				JOptionPane.showMessageDialog(null,"Numero rastrelliera non esistente.");
+				return;
+			}
+			accesso.setRastrelliera(rastrelliera.getNumeroPosti(),rastrelliera.getNumeroRastrelliera(),rastrelliera.getBiciclette());
+			boolean check = false;
+			String orarioprelievo = "";
+			Bicicletta[] bicicletta = accesso.getRastrelliera().getBiciclette();
+			for(int i = 0; i < bicicletta.length; i++){
+				if(bicicletta[i].getTariffa() == 1.5 && bicicletta[i].getOrarioPrelievo().equals("")){
+					GregorianCalendar orario_attuale = new GregorianCalendar();
+					int ora_attuale = orario_attuale.get(GregorianCalendar.HOUR_OF_DAY);
+					int minuto_attuale = orario_attuale.get(GregorianCalendar.MINUTE);
+					orarioprelievo = (String.valueOf(ora_attuale) + ":" + String.valueOf(minuto_attuale));
+					bicicletta[i].setOrarioPrelievo(orarioprelievo);
+					check = true;
+					break;
+				}
+			}
+			String tipologia = "elettrica";
+			if(check == true){
+				try{
+					dao.updateRastrelliera(tipologia,codice_utente,numero_rastrelliera,orarioprelievo,false);
+					JOptionPane.showMessageDialog(null, "Operazione di noleggio riuscita!\nHai noleggiato una bicicletta elettrica.\nMorsa sbloccata!");
+					rastrelliera.setTxtCodice("");
+					rastrelliera.setTxtRastrelliera("");
+					rastrelliera.setTxtPassword("");
+				}
+				catch(SQLException e){
+					e.printStackTrace();
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Non ci sono biciclette normali disponibili su questa rastrelliera.");
+			}
+		}
+	}
+	
+	public class SeggiolinoAscolto implements ActionListener{
+		public void actionPerformed(ActionEvent arg0){
+			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
+			int codice_utente = Integer.parseInt(rastrelliera.getTxtCodice());
+			RastrellieraDao dao = new RastrellieraDao();
+			Rastrelliera rastrelliera = null;
+			try{
+				rastrelliera = dao.selectRastrelliera(numero_rastrelliera);
+				if(dao.controlloNoleggio(codice_utente)){
+					JOptionPane.showMessageDialog(null,"Stai gia' noleggiando una bicicletta!");
+					return;
+				}
+			}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+			if(rastrelliera == null){
+				JOptionPane.showMessageDialog(null,"Numero rastrelliera non esistente.");
+				return;
+			}
+			accesso.setRastrelliera(rastrelliera.getNumeroPosti(),rastrelliera.getNumeroRastrelliera(),rastrelliera.getBiciclette());
+			boolean check = false;
+			String orarioprelievo = "";
+			Bicicletta[] bicicletta = accesso.getRastrelliera().getBiciclette();
+			for(int i = 0; i < bicicletta.length; i++){
+				if(bicicletta[i].getTariffa() == 1.5 && bicicletta[i].getOrarioPrelievo().equals("") && (bicicletta[i] instanceof Elettrica)){
+					if(((Elettrica)bicicletta[i]).getSeggiolino() == true){
+						GregorianCalendar orario_attuale = new GregorianCalendar();
+						int ora_attuale = orario_attuale.get(GregorianCalendar.HOUR_OF_DAY);
+						int minuto_attuale = orario_attuale.get(GregorianCalendar.MINUTE);
+						orarioprelievo = (String.valueOf(ora_attuale) + ":" + String.valueOf(minuto_attuale));
+						bicicletta[i].setOrarioPrelievo(orarioprelievo);
+						check = true;
+						break;
+					}
+				}
+			}
+			String tipologia = "elettrica";
+			if(check == true){
+				try{
+					dao.updateRastrelliera(tipologia,codice_utente,numero_rastrelliera,orarioprelievo,true);
+					JOptionPane.showMessageDialog(null, "Operazione di noleggio riuscita!\nHai noleggiato una bicicletta elettrica con seggiolino.\nMorsa sbloccata!");
+					rastrelliera.setTxtCodice("");
+					rastrelliera.setTxtRastrelliera("");
+					rastrelliera.setTxtPassword("");
+				}
+				catch(SQLException e){
+					e.printStackTrace();
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "Non ci sono biciclette normali disponibili su questa rastrelliera.");
+			}
 		}
 	}
 }
