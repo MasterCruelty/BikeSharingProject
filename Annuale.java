@@ -13,7 +13,10 @@ public class Annuale extends Abbonamento {
 	}
 	
 	public void inizioValidita() {
-		GregorianCalendar oggi = new GregorianCalendar(GregorianCalendar.YEAR,GregorianCalendar.MONTH+1,GregorianCalendar.DAY_OF_MONTH);
-		super.setScadenza(String.valueOf(oggi.get(GregorianCalendar.DAY_OF_MONTH)) + "/" + String.valueOf(oggi.get(GregorianCalendar.MONTH)) + "/" + String.valueOf(oggi.get(GregorianCalendar.YEAR+1)));
+		Calendar oggi = Calendar.getInstance();
+		int giorno = oggi.get(Calendar.DAY_OF_MONTH);
+		int mese = oggi.get(Calendar.MONTH) +1;
+		int anno = oggi.get(Calendar.YEAR) + 1;
+		this.setScadenza(String.valueOf(giorno) + "/" + String.valueOf(mese) + "/" + String.valueOf(anno));
 	}
 }

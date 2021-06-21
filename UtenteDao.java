@@ -131,4 +131,14 @@ public class UtenteDao{
 		else
 			return null;
 	}
+	
+	public void updateScadenzaAbbonamento(int codice_utente, String scadenza) throws SQLException {
+		String query = "UPDATE abbonamento " +
+					   "SET scadenza_abbo=? " +
+					   "WHERE codiceutente=? ";
+		PreparedStatement preparato = connessione.prepareStatement(query);
+		preparato.setString(1,scadenza);
+		preparato.setInt(2,codice_utente);
+		preparato.executeUpdate();	
+	}
 }
