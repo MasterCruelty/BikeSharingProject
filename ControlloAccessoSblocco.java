@@ -91,9 +91,7 @@ public class ControlloAccessoSblocco {
 	 * @param numeroRastrelliera 
 	 */
 	public void setRastrelliera(int posti, int numeroRastrelliera,Bicicletta[] biciclette) {
-		this.rastrelliera.setNumeroPosti(posti);
-		this.rastrelliera.setNumeroRastrelliera(numeroRastrelliera);
-		this.rastrelliera.setBiciclette(biciclette);
+		this.rastrelliera = new Rastrelliera(posti,numeroRastrelliera,biciclette);
 	}
 
 }
