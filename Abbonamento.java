@@ -47,12 +47,22 @@ public abstract class Abbonamento {
 	* @param scadenza
 	* @return Boolean
 	*/
-	public Boolean controlloValidita(String scadenza){
+	public boolean controlloValidita(String scadenza){
 		String[] giornoMeseAnno = scadenza.split("/");
-		GregorianCalendar controlloScadenza = new GregorianCalendar(Integer.parseInt(giornoMeseAnno[2]),Integer.parseInt(giornoMeseAnno[1])+1,Integer.parseInt(giornoMeseAnno[0]));
-		GregorianCalendar oggi = new GregorianCalendar(GregorianCalendar.YEAR,GregorianCalendar.MONTH+1,GregorianCalendar.DAY_OF_MONTH);
+		int anno = Integer.parseInt(giornoMeseAnno[2]);
+		int mese = Integer.parseInt(giornoMeseAnno[1]);
+		int giorno = Integer.parseInt(giornoMeseAnno[0]);
+		//istanzio la classe calendar
+		Calendar controlloScadenza = Calendar.getInstance();
+		//setto anno, mese e giorno con la data di scadenza passata come parametro.
+		controlloScadenza.set(anno,mese,giorno);
+		Calendar oggi = Calendar.getInstance();
+		//aggiusto il mese perchè partono da 0 in Calendar
+		int oggimese = oggi.get(Calendar.MONTH) + 1;
+		oggi.set(oggi.get(Calendar.YEAR),oggimese,oggi.get(Calendar.DAY_OF_MONTH));
+		System.out.println(oggi.get(Calendar.YEAR) +"/" +  oggi.get(Calendar.MONTH) + "/"+oggi.get(Calendar.DAY_OF_MONTH));
 		//controllo se la data odierna non è successiva alla data di scadenza dell'abbonamento.
-		if(oggi.before(controlloScadenza)){
+		if(controlloScadenza.after(oggi)){
 			return true;
 		}
 		else{

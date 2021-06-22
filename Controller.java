@@ -183,8 +183,7 @@ public class Controller {
 						JOptionPane.showMessageDialog(null,"Numero rastrelliera non esistente.");
 						return;
 					}
-					JOptionPane.showMessageDialog(null, "Accesso eseguito.");
-					rastrelliera.setVisible(false);
+					//Se si tratta di un abbonamento occasionale, se la scadenza non esiste e quindi è il primo accesso, inizializzo la scadenza ora al primo accesso.
 					if((accesso.getUtente().getAbbonamento() instanceof Occasionale) && accesso.getUtente().getAbbonamento().getScadenza().equals("")){
 						accesso.getUtente().getAbbonamento().inizioValidita();
 						String scadenza = accesso.getUtente().getAbbonamento().getScadenza();
@@ -196,6 +195,15 @@ public class Controller {
 						}
 						JOptionPane.showMessageDialog(null, "Abbonamento attivato!\nIl tuo abbonamento risulta valido fino a " + scadenza);
 					}
+					//controllo se l'abbonamento risulta ancora valido confrontando la scadenza riportata con la data di oggi.
+					if(accesso.getUtente().getAbbonamento().controlloValidita(accesso.getUtente().getAbbonamento().getScadenza())){
+						JOptionPane.showMessageDialog(null,"Abbonamento valido.\nAccesso eseguito.");
+					}
+					else{
+						JOptionPane.showMessageDialog(null,"Abbonamento scaduto. Non e' possibile accedere al servizio.");
+						return;
+					}
+					rastrelliera.setVisible(false);
 					prelievobici.setVisible(true);
 					
 				}
