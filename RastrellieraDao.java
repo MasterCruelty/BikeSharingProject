@@ -75,7 +75,7 @@ public class RastrellieraDao {
 	
 	public void updateRastrelliera(String tipologia,int codiceutente,int numerorastrelliera,String orarioprelievo,boolean seggiolino) throws SQLException{
 		String query = "UPDATE bicicletta "  +
-					   "SET biciutente=?, orarioprelievo =? "  +
+					   "SET biciutente=?, orarioprelievo=?"  +
 					   "WHERE tipologia=? " +
 					   "AND biciutente IS NULL " +
 					   "AND orarioprelievo IS NULL " +
@@ -88,6 +88,31 @@ public class RastrellieraDao {
 		preparato.setString(3,tipologia);
 		preparato.setInt(4,numerorastrelliera);
 		preparato.setBoolean(5,seggiolino);
+		preparato.executeUpdate();
+		//aggiorno la rastrelliera modificando il numero di posti disponibili.
+		query = "UPDATE rastrelliera " +
+					   "SET postidisponibili=postidisponibili+1 " +
+					   "WHERE numerorastrelliera=? ";
+		preparato = connessione.prepareStatement(query);
+		preparato.setInt(1,numerorastrelliera);
+		preparato.executeUpdate();
+	}
+	
+	public void restituzioneBicicletta(int codiceutente,int numero_rastrelliera) throws SQLException{
+		String query = "UPDATE bicicletta " +
+					   "SET biciutente=NULL, orarioprelievo=NULL, bicirastrelliera=? " +
+					   "WHERE biciutente=? ";
+		PreparedStatement preparato = connessione.prepareStatement(query);
+		preparato.setInt(1,numero_rastrelliera);
+		preparato.setInt(2,codiceutente);
+		preparato.executeUpdate();
+		
+		//aggiorno la rastrelliera modificando il numero di posti disponibili.
+		query = "UPDATE rastrelliera " +
+				"SET postidisponibili=postidisponibili-1 " +
+				"WHERE numerorastrelliera=? ";
+		preparato = connessione.prepareStatement(query);
+		preparato.setInt(1,numero_rastrelliera);
 		preparato.executeUpdate();
 	}
 }
