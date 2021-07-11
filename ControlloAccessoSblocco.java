@@ -47,6 +47,9 @@ public class ControlloAccessoSblocco {
 		long differenza_minuti = differenza / (60 * 1000);
 		double tariffa = bicicletta.getTariffa();
 		double importo = 0.0;
+		if(controlloMulta(differenza_ore,differenza_minuti)){
+			importo += 150;
+		}
 		if(differenza_minuti > 30 && bicicletta instanceof Normale){
 			importo += tariffa;
 		}
@@ -58,6 +61,21 @@ public class ControlloAccessoSblocco {
 		}
 		return importo;
 	}
+	
+	/**
+	* @param ore
+	* @param minuti
+	* @return boolean
+	*/
+	public boolean controlloMulta(long ore, long minuti){
+		if((ore >=2 && minuti > 0)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
 	/**
 	* @param tipo_abbonamento
 	* @return boolean
