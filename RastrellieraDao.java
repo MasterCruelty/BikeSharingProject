@@ -55,6 +55,38 @@ public class RastrellieraDao {
 		}
 	}
 	
+	public Bicicletta selectBicicletta(int codiceutente) throws SQLException{
+		String query = "SELECT * " +
+					   "FROM bicicletta " +
+					   "WHERE  biciutente=?";
+		PreparedStatement preparato = connessione.prepareStatement(query);
+		preparato.setInt(1,codiceutente);
+		ResultSet rs = preparato.executeQuery();
+		boolean check = false;
+		String tipologia = "";
+		double tariffa = 0.0;
+		String orarioprelievo = "";
+		boolean seggiolino = false;
+		while(rs.next()){
+			check = true;
+			tariffa = rs.getDouble("tariffa");
+			orarioprelievo = rs.getString("orarioprelievo");
+			tipologia = rs.getString("tipologia");
+			seggiolino = rs.getBoolean("seggiolino");
+		}
+		if(check == true){
+			if(tipologia.equals("normale")){
+				return new Normale(tariffa,orarioprelievo,true);
+			}
+			else{
+				return new Elettrica(tariffa,orarioprelievo,seggiolino);
+			}
+		}
+		else{
+			return null;
+		}
+	}
+	
 	public boolean controlloNoleggio(int codice) throws SQLException{
 		String query = "SELECT biciutente " +
 					   "FROM bicicletta " +
