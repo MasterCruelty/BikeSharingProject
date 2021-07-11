@@ -98,7 +98,7 @@ public class UtenteDao{
 		studente = staff = false;
 		double prezzo, residuo;
 		prezzo = residuo = 0.0;
-		int numero = 0;
+		long numero = 0;
 		while(rs.next()){
 			check = true;
 			nome = rs.getString("nome");
@@ -109,7 +109,7 @@ public class UtenteDao{
 			prezzo = rs.getDouble("prezzo");
 			scadenzaabbo = rs.getString("scadenza_abbo");
 			tipologia = rs.getString("tipologia");
-			numero = rs.getInt("numerocarta");
+			numero = rs.getLong("numerocarta");
 			scadenzacarta = rs.getString("scadenza_carta");
 			residuo = rs.getDouble("residuo");
 		}
