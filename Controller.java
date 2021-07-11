@@ -34,20 +34,23 @@ public class Controller {
 		this.registrazione = registrazione;
 		this.rastrelliera = rastrelliera;
 		this.prelievobici = prelievobici;
+		this.restituzione = restituzione;
 		this.avvio.ascoltoRegistrazione(new RegistrazioneAscolto());
 		this.avvio.ascoltoRastrelliera(new RastrellieraAscolto());
+		this.avvio.ascoltoRestituzione(new RestituzioneAscolto());
 		this.registrazione.ascoltoInviaDati(new ConfermaDatiAscolto());
 		this.rastrelliera.ascoltoAccesso(new ConfermaAccessoAscolto());
 		this.prelievobici.ascoltoNormale(new NormaleAscolto());
 		this.prelievobici.ascoltoElettrica(new ElettricaAscolto());
 		this.prelievobici.ascoltoSeggiolino(new SeggiolinoAscolto());
+		this.restituzione.ascoltoConfermaRestituzione(new ConfermaRestituzioneAscolto());
 		this.accesso = accesso;
 	}
 	
 	public class RegistrazioneAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			registrazione.setVisible(true);
-			JOptionPane.showMessageDialog(null,"Inserire i dati richiesti per effettuare la registrazione");
+			JOptionPane.showMessageDialog(null,"Inserire i dati richiesti per effettuare la registrazione.");
 		}
 	}
 	
@@ -193,11 +196,14 @@ public class Controller {
 						catch(SQLException e){
 							e.printStackTrace();
 						}
-						JOptionPane.showMessageDialog(null, "Abbonamento attivato!\nIl tuo abbonamento risulta valido fino a " + scadenza);
+						JOptionPane.showMessageDialog(null, "Utente: " + accesso.getUtente().getNome() + " " + accesso.getUtente().getCognome() +
+															"Abbonamento attivato!\nIl tuo abbonamento risulta valido fino a " + scadenza);
 					}
 					//controllo se l'abbonamento risulta ancora valido confrontando la scadenza riportata con la data di oggi.
 					if(accesso.getUtente().getAbbonamento().controlloValidita(accesso.getUtente().getAbbonamento().getScadenza())){
-						JOptionPane.showMessageDialog(null,"Abbonamento valido.\nAccesso eseguito.");
+						JOptionPane.showMessageDialog(null, "Utente: " + accesso.getUtente().getNome() + " " + accesso.getUtente().getCognome() +
+															"\nResiduo su carta: " + accesso.getUtente().getCarta().getResiduo() + 
+															"\nAbbonamento valido.\nAccesso eseguito.");
 					}
 					else{
 						JOptionPane.showMessageDialog(null,"Abbonamento scaduto. Non e' possibile accedere al servizio.");
@@ -253,7 +259,8 @@ public class Controller {
 			if(check == true){
 				try{
 					dao.updateRastrelliera(tipologia,codice_utente,numero_rastrelliera,orarioprelievo,false);
-					JOptionPane.showMessageDialog(null, "Operazione di noleggio riuscita!\nHai noleggiato una bicicletta normale.\nMorsa sbloccata!");
+					JOptionPane.showMessageDialog(null, "Utente: " + accesso.getUtente().getNome() + " " + accesso.getUtente().getCognome() +
+													    "\nOperazione di noleggio riuscita!\nHai noleggiato una bicicletta normale.\nMorsa sbloccata!");
 					rastrelliera.setTxtCodice("");
 					rastrelliera.setTxtRastrelliera("");
 					rastrelliera.setTxtPassword("");
@@ -309,7 +316,8 @@ public class Controller {
 			if(check == true){
 				try{
 					dao.updateRastrelliera(tipologia,codice_utente,numero_rastrelliera,orarioprelievo,false);
-					JOptionPane.showMessageDialog(null, "Operazione di noleggio riuscita!\nHai noleggiato una bicicletta elettrica.\nMorsa sbloccata!");
+					JOptionPane.showMessageDialog(null, "Utente: " + accesso.getUtente().getNome() + " " + accesso.getUtente().getCognome() +
+													    "\nOperazione di noleggio riuscita!\nHai noleggiato una bicicletta elettrica.\nMorsa sbloccata!");
 					rastrelliera.setTxtCodice("");
 					rastrelliera.setTxtRastrelliera("");
 					rastrelliera.setTxtPassword("");
@@ -367,7 +375,8 @@ public class Controller {
 			if(check == true){
 				try{
 					dao.updateRastrelliera(tipologia,codice_utente,numero_rastrelliera,orarioprelievo,true);
-					JOptionPane.showMessageDialog(null, "Operazione di noleggio riuscita!\nHai noleggiato una bicicletta elettrica con seggiolino.\nMorsa sbloccata!");
+					JOptionPane.showMessageDialog(null,"Utente: " + accesso.getUtente().getNome() + " " + accesso.getUtente().getCognome() +
+													   "\nOperazione di noleggio riuscita!\nHai noleggiato una bicicletta elettrica con seggiolino.\nMorsa sbloccata!");
 					rastrelliera.setTxtCodice("");
 					rastrelliera.setTxtRastrelliera("");
 					rastrelliera.setTxtPassword("");
@@ -382,6 +391,62 @@ public class Controller {
 				JOptionPane.showMessageDialog(null, "Non ci sono biciclette normali disponibili su questa rastrelliera.");
 				prelievobici.setVisible(false);
 				avvio.setVisible(true);
+			}
+		}
+	}
+	
+	public class RestituzioneAscolto implements ActionListener{
+		public void actionPerformed(ActionEvent arg0){
+			restituzione.setVisible(true);
+			JOptionPane.showMessageDialog(null,"Inserire i dati richiesti per effettuare la restituzione.");
+		}
+	}
+	
+	public class ConfermaRestituzioneAscolto implements ActionListener {
+		public void actionPerformed(ActionEvent arg0){
+			//prendo i dati inseriti nelle caselle di testo.
+			int numero_rastrelliera = Integer.parseInt(restituzione.getTxtRastrelliera());
+			int codice_utente = Integer.parseInt(restituzione.getTxtCodice());
+			RastrellieraDao dao = new RastrellieraDao();
+			UtenteDao userdao = new UtenteDao();
+			Rastrelliera rastre = null;
+			Utente utente = null;
+			Bicicletta bici = null;
+			try{
+				rastre = dao.selectRastrelliera(numero_rastrelliera);
+				utente = userdao.selectUtente(codice_utente);
+				accesso.setRastrelliera(rastre.getNumeroPosti(),rastre.getNumeroRastrelliera(),rastre.getBiciclette());
+				accesso.setUtente(utente.getNome(),utente.getCognome(),utente.getPassword(),false,false,utente.getAbbonamento(),utente.getCarta());
+				//controllo se effettivamente l'utente è in possesso di una bicicletta da restituire.
+				if(dao.controlloNoleggio(codice_utente)){
+					//controllo se la rastrelliera selezionata ha almeno 1 posto disponibile per restituire la bicicletta.
+					if(accesso.getRastrelliera().getNumeroPosti() > 0){
+						bici = dao.selectBicicletta(codice_utente);
+						//calcolo la tariffa relativa all'utilizzo della bicicletta.
+						double importo = accesso.calcolaTariffa(bici);
+						accesso.getUtente().paga(importo);
+						//aggiorno sul database il residuo della carta dell'utente e aggiorno la rastrelliera e i posti disponibili.
+						userdao.updateResiduo(codice_utente,accesso.getUtente().getCarta().getResiduo());
+						dao.restituzioneBicicletta(codice_utente,numero_rastrelliera);
+						JOptionPane.showMessageDialog(null,"Utente: " + accesso.getUtente().getNome() + " " + accesso.getUtente().getCognome() + 
+														   "\nRestituzione confermata! importo totale: " + importo + "\nResiduo: " + accesso.getUtente().getCarta().getResiduo() +
+														   "\nSe l'importo supera i 150 euro significa che avete dovuto pagare una multa per eccesso di noleggio.");
+						restituzione.setVisible(false);
+						restituzione.setTxtCodice("");
+						restituzione.setTxtRastrelliera("");
+					}
+					else{
+						JOptionPane.showMessageDialog(null,"Tutti i posti sono occupati in questa rastrelliera, provarne un'altra.");
+						return;
+					}
+				}
+				else{
+					JOptionPane.showMessageDialog(null,"Non hai noleggiato nessuna bicicletta, restituzione impossibile.");
+					return;
+				}
+			}
+			catch(SQLException e){
+				e.printStackTrace();
 			}
 		}
 	}
