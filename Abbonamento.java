@@ -60,7 +60,6 @@ public abstract class Abbonamento {
 		//aggiusto il mese perchè partono da 0 in Calendar
 		int oggimese = oggi.get(Calendar.MONTH) + 1;
 		oggi.set(oggi.get(Calendar.YEAR),oggimese,oggi.get(Calendar.DAY_OF_MONTH));
-		System.out.println(oggi.get(Calendar.YEAR) +"/" +  oggi.get(Calendar.MONTH) + "/"+oggi.get(Calendar.DAY_OF_MONTH));
 		//controllo se la data odierna non è successiva alla data di scadenza dell'abbonamento.
 		if(controlloScadenza.after(oggi)){
 			return true;
