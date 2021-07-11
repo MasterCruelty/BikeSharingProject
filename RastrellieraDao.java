@@ -28,7 +28,7 @@ public class RastrellieraDao {
 		double tariffa = 0.0;
 		String tipologia = "";
 		String orarioprelievo = "";
-		Bicicletta[] biciclette = new Bicicletta[5];
+		Bicicletta[] biciclette = new Bicicletta[15];
 		while(rs.next()){
 			check = true;
 			numeroposti = rs.getInt("postidisponibili");
