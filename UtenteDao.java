@@ -141,4 +141,14 @@ public class UtenteDao{
 		preparato.setInt(2,codice_utente);
 		preparato.executeUpdate();	
 	}
+	
+	public void updateResiduo(int codiceutente,double residuo) throws SQLException {
+		String query = "UPDATE cartadicredito " +
+					   "SET residuo=? " +
+					   "WHERE codiceutente=?";
+		PreparedStatement preparato = connessione.prepareStatement(query);
+		preparato.setDouble(1,residuo);
+		preparato.setInt(2,codiceutente);
+		preparato.executeUpdate();
+	}
 }
