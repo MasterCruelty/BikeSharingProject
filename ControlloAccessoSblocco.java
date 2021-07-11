@@ -25,22 +25,29 @@ public class ControlloAccessoSblocco {
 	 * @param bicicletta 
 	 * @return double
 	 */
-	public double calcolaTariffa(Bicicletta bicicletta) throws ParseException{
-		GregorianCalendar orario_attuale = new GregorianCalendar();
+	public double calcolaTariffa(Bicicletta bicicletta){
+		Calendar orario_attuale = Calendar.getInstance();
 		String orario_prelievo = bicicletta.getOrarioPrelievo();
 			
-		int ora_attuale = orario_attuale.get(GregorianCalendar.HOUR_OF_DAY);
-		int minuto_attuale = orario_attuale.get(GregorianCalendar.MINUTE);
+		int ora_attuale = orario_attuale.get(Calendar.HOUR_OF_DAY);
+		int minuto_attuale = orario_attuale.get(Calendar.MINUTE);
 		
 		SimpleDateFormat formato_ora = new SimpleDateFormat("HH:mm");
-		Date attuale = formato_ora.parse(String.valueOf(ora_attuale) + String.valueOf(minuto_attuale));
-		Date prelievo = formato_ora.parse(orario_prelievo);
+		Date attuale = null;
+		Date prelievo = null;
+		try{
+			attuale = formato_ora.parse(String.valueOf(ora_attuale) + ":" + String.valueOf(minuto_attuale) + ":00");
+			prelievo = formato_ora.parse(orario_prelievo);
+		}
+		catch(ParseException e){
+			e.printStackTrace();
+		}
 		long differenza = attuale.getTime() - prelievo.getTime();
 		long differenza_ore = differenza / (60 * 60 * 1000);
 		long differenza_minuti = differenza / (60 * 1000);
 		double tariffa = bicicletta.getTariffa();
 		double importo = 0.0;
-		if(differenza_minuti > 30 && tariffa == 0.50){
+		if(differenza_minuti > 30 && bicicletta instanceof Normale){
 			importo += tariffa;
 		}
 		else if(differenza_minuti > 30){
