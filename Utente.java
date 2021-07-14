@@ -42,7 +42,6 @@ public class Utente {
 	 * @return cognome
 	 */
 	public String getCognome() {
-		// TODO implement here
 		return this.cognome;
 	}
 	
@@ -57,7 +56,6 @@ public class Utente {
 	 * @return statusStudente
 	 */
 	public boolean getStatus() {
-		// TODO implement here
 		return this.statusStudente;
 	}
 
@@ -65,7 +63,6 @@ public class Utente {
 	 * @return abbonamento
 	 */
 	public Abbonamento getAbbonamento() {
-		// TODO implement here
 		return this.abbonamento;
 	}
 
@@ -73,7 +70,6 @@ public class Utente {
 	 * @return carta
 	 */
 	public CartaDiCredito getCarta() {
-		// TODO implement here
 		return this.carta;
 	}
 
@@ -81,7 +77,6 @@ public class Utente {
 	 * @return staff
 	 */
 	public boolean getStaff() {
-		// TODO implement here
 		return this.staff;
 	}
 
