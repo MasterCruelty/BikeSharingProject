@@ -47,6 +47,7 @@ public class Controller {
 		this.accesso = accesso;
 	}
 	
+	//listener che apre la finestra della registrazione di un abbonamento.
 	public class RegistrazioneAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			registrazione.setVisible(true);
@@ -54,6 +55,7 @@ public class Controller {
 		}
 	}
 	
+	//listener che gestisce la registrazione di un abbonamento.
 	public class ConfermaDatiAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			String nome = registrazione.getTxtNome();
@@ -125,6 +127,7 @@ public class Controller {
 		}
 	}
 	
+	//listener che apre la finestra dell'accesso a una rastrelliera.
 	public class RastrellieraAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			rastrelliera.setVisible(true);
@@ -133,6 +136,7 @@ public class Controller {
 		}
 	}
 	
+	//listener che gestisce il login presso una rastrelliera.
 	public class ConfermaAccessoAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			int codice = Integer.parseInt(rastrelliera.getTxtCodice());
@@ -220,6 +224,7 @@ public class Controller {
 		}
 	}
 	
+	//listener che gestisce il noleggio o ricolloccamento di una bicicletta normale.
 	public class NormaleAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
@@ -279,6 +284,7 @@ public class Controller {
 		}
 	}
 	
+	//listener che gestisce il noleggio o ricolloccamento di una bicicletta elettrica.
 	public class ElettricaAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
@@ -336,6 +342,7 @@ public class Controller {
 		}
 	}
 	
+	//listener che gestisce il noleggio o ricolloccamento di una bicicletta elettrica con seggiolino.
 	public class SeggiolinoAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
@@ -395,6 +402,7 @@ public class Controller {
 		}
 	}
 	
+	//listener che apre la finestra della restituzione bicicletta.
 	public class RestituzioneAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
 			restituzione.setVisible(true);
@@ -402,6 +410,7 @@ public class Controller {
 		}
 	}
 	
+	//Listener che gestisce la restituzione bicicletta.
 	public class ConfermaRestituzioneAscolto implements ActionListener {
 		public void actionPerformed(ActionEvent arg0){
 			//prendo i dati inseriti nelle caselle di testo.
@@ -430,7 +439,7 @@ public class Controller {
 						dao.restituzioneBicicletta(codice_utente,numero_rastrelliera);
 						JOptionPane.showMessageDialog(null,"Utente: " + accesso.getUtente().getNome() + " " + accesso.getUtente().getCognome() + 
 														   "\nRestituzione confermata! importo totale: " + importo + "\nResiduo: " + accesso.getUtente().getCarta().getResiduo() +
-														   "\nSe l'importo supera i 150 euro significa che avete dovuto pagare una multa per eccesso di noleggio.");
+														   "\nSe l'importo supera i 150 euro significa che avete dovuto pagare una multa per eccesso di noleggio(2 ore).");
 						restituzione.setVisible(false);
 						restituzione.setTxtCodice("");
 						restituzione.setTxtRastrelliera("");
