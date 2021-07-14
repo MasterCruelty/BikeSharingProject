@@ -201,7 +201,7 @@ public class Controller {
 							e.printStackTrace();
 						}
 						JOptionPane.showMessageDialog(null, "Utente: " + accesso.getUtente().getNome() + " " + accesso.getUtente().getCognome() +
-															"Abbonamento attivato!\nIl tuo abbonamento risulta valido fino a " + scadenza);
+															"\nAbbonamento attivato!\nIl tuo abbonamento risulta valido fino a " + scadenza);
 					}
 					//controllo se l'abbonamento risulta ancora valido confrontando la scadenza riportata con la data di oggi.
 					if(accesso.getUtente().getAbbonamento().controlloValidita(accesso.getUtente().getAbbonamento().getScadenza())){
@@ -230,10 +230,16 @@ public class Controller {
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
 			int codice_utente = Integer.parseInt(rastrelliera.getTxtCodice());
 			//istanzio la classe dao per ottenere successivamente i dati della rastrelliera alla quale si vuole accedere.
+			//dichiaro gli oggetti necessari per tutte le operazioni possibili.
 			RastrellieraDao dao = new RastrellieraDao();
 			Rastrelliera rastre = null;
+			Rastrelliera rastre_nuova = null;
+			UtenteDao userdao = new UtenteDao();
+			Utente staff = null;
 			try{
 				rastre = dao.selectRastrelliera(numero_rastrelliera);
+				accesso.setRastrelliera(rastre.getNumeroPosti(),rastre.getNumeroRastrelliera(),rastre.getBiciclette());
+				staff = userdao.selectStaff(codice_utente);
 				//controllo se l'utente non stia già noleggiando una bicicletta.
 				if(dao.controlloNoleggio(codice_utente)){
 					JOptionPane.showMessageDialog(null,"Stai gia' noleggiando una bicicletta!");
@@ -241,11 +247,32 @@ public class Controller {
 					avvio.setVisible(true);
 					return;
 				}
+				//se l'utente ha privilegio da staff, può effettuare l'azione di ricollocamento di una bicicletta.
+				if(staff.getStaff()){
+					String input_rastrelliera = JOptionPane.showInputDialog("Inserire il numero di rastrelliera sulla quale spostare la bici.");
+					int numero_nuova_rastrelliera = Integer.parseInt(input_rastrelliera);
+					rastre_nuova = dao.selectRastrelliera(numero_nuova_rastrelliera);
+					accesso.setRastrelliera(rastre_nuova.getNumeroPosti(),rastre_nuova.getNumeroRastrelliera(),rastre_nuova.getBiciclette());
+					if(accesso.getRastrelliera().getNumeroPosti() > 0){
+						try{
+							dao.ricollocamentoBicicletta(numero_rastrelliera,numero_nuova_rastrelliera,"normale");
+							JOptionPane.showMessageDialog(null,"La bicicletta risulta essere stata correttamente ricollocata dalla rastrelliera " + numero_rastrelliera +
+															   " alla rastrelliera " + numero_nuova_rastrelliera);
+							return;
+						}
+						catch(SQLException e){
+							e.printStackTrace();
+						}
+					}
+					else{
+						JOptionPane.showMessageDialog(null,"La rastrelliera selezionata non ha posti disponibili!");
+						return;
+					}
+				}
 			}
 			catch(SQLException e){
 				e.printStackTrace();
 			}
-			accesso.setRastrelliera(rastre.getNumeroPosti(),rastre.getNumeroRastrelliera(),rastre.getBiciclette());
 			boolean check = false;
 			String orarioprelievo = "";
 			Bicicletta[] bicicletta = accesso.getRastrelliera().getBiciclette();
@@ -289,15 +316,44 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0){
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
 			int codice_utente = Integer.parseInt(rastrelliera.getTxtCodice());
+			//istanzio la classe dao per ottenere successivamente i dati della rastrelliera alla quale si vuole accedere.
+			//dichiaro gli oggetti necessari per tutte le operazioni possibili.
 			RastrellieraDao dao = new RastrellieraDao();
 			Rastrelliera rastre = null;
+			Rastrelliera rastre_nuova = null;
+			UtenteDao userdao = new UtenteDao();
+			Utente staff = null;
 			try{
 				rastre = dao.selectRastrelliera(numero_rastrelliera);
+				accesso.setRastrelliera(rastre.getNumeroPosti(),rastre.getNumeroRastrelliera(),rastre.getBiciclette());
+				staff = userdao.selectStaff(codice_utente);
 				if(dao.controlloNoleggio(codice_utente)){
 					JOptionPane.showMessageDialog(null,"Stai gia' noleggiando una bicicletta!");
 					prelievobici.setVisible(false);
 					avvio.setVisible(true);
 					return;
+				}
+				//se l'utente ha privilegio da staff, può effettuare l'azione di ricollocamento di una bicicletta.
+				if(staff.getStaff()){
+					String input_rastrelliera = JOptionPane.showInputDialog("Inserire il numero di rastrelliera sulla quale spostare la bici.");
+					int numero_nuova_rastrelliera = Integer.parseInt(input_rastrelliera);
+					rastre_nuova = dao.selectRastrelliera(numero_nuova_rastrelliera);
+					accesso.setRastrelliera(rastre_nuova.getNumeroPosti(),rastre_nuova.getNumeroRastrelliera(),rastre_nuova.getBiciclette());
+					if(accesso.getRastrelliera().getNumeroPosti() > 0){
+						try{
+							dao.ricollocamentoBicicletta(numero_rastrelliera,numero_nuova_rastrelliera,"normale");
+							JOptionPane.showMessageDialog(null,"La bicicletta risulta essere stata correttamente ricollocata dalla rastrelliera " + numero_rastrelliera +
+															   " alla rastrelliera " + numero_nuova_rastrelliera);
+							return;
+						}
+						catch(SQLException e){
+							e.printStackTrace();
+						}
+					}
+					else{
+						JOptionPane.showMessageDialog(null,"La rastrelliera selezionata non ha posti disponibili!");
+						return;
+					}
 				}
 			}
 			catch(SQLException e){
@@ -347,15 +403,44 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0){
 			int numero_rastrelliera = Integer.parseInt(rastrelliera.getTxtRastrelliera());
 			int codice_utente = Integer.parseInt(rastrelliera.getTxtCodice());
+			//istanzio la classe dao per ottenere successivamente i dati della rastrelliera alla quale si vuole accedere.
+			//dichiaro gli oggetti necessari per tutte le operazioni possibili.
 			RastrellieraDao dao = new RastrellieraDao();
 			Rastrelliera rastre = null;
+			Rastrelliera rastre_nuova = null;
+			UtenteDao userdao = new UtenteDao();
+			Utente staff = null;
 			try{
 				rastre = dao.selectRastrelliera(numero_rastrelliera);
+				accesso.setRastrelliera(rastre.getNumeroPosti(),rastre.getNumeroRastrelliera(),rastre.getBiciclette());
+				staff = userdao.selectStaff(codice_utente);
 				if(dao.controlloNoleggio(codice_utente)){
 					JOptionPane.showMessageDialog(null,"Stai gia' noleggiando una bicicletta!");
 					prelievobici.setVisible(false);
 					avvio.setVisible(true);
 					return;
+				}
+				//se l'utente ha privilegio da staff, può effettuare l'azione di ricollocamento di una bicicletta.
+				if(staff.getStaff()){
+					String input_rastrelliera = JOptionPane.showInputDialog("Inserire il numero di rastrelliera sulla quale spostare la bici.");
+					int numero_nuova_rastrelliera = Integer.parseInt(input_rastrelliera);
+					rastre_nuova = dao.selectRastrelliera(numero_nuova_rastrelliera);
+					accesso.setRastrelliera(rastre_nuova.getNumeroPosti(),rastre_nuova.getNumeroRastrelliera(),rastre_nuova.getBiciclette());
+					if(accesso.getRastrelliera().getNumeroPosti() > 0){
+						try{
+							dao.ricollocamentoBicicletta(numero_rastrelliera,numero_nuova_rastrelliera,"normale");
+							JOptionPane.showMessageDialog(null,"La bicicletta risulta essere stata correttamente ricollocata dalla rastrelliera " + numero_rastrelliera +
+															   " alla rastrelliera " + numero_nuova_rastrelliera);
+							return;
+						}
+						catch(SQLException e){
+							e.printStackTrace();
+						}
+					}
+					else{
+						JOptionPane.showMessageDialog(null,"La rastrelliera selezionata non ha posti disponibili!");
+						return;
+					}
 				}
 			}
 			catch(SQLException e){
