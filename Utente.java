@@ -143,23 +143,4 @@ public class Utente {
 		this.carta.setResiduo(this.carta.getResiduo() - abbonamento.getPrezzo());
 		this.abbonamento = abbonamento;
 	}
-
-	/**
-	 * @param bici 
-	 * @param numero 
-	 */
-	public void ricolloca(Bicicletta bici, Rastrelliera numero) {
-		Bicicletta[] bicicletteRastrelliera = numero.getBiciclette();
-		if(bicicletteRastrelliera.length == numero.getNumeroPosti()){
-			System.out.println("Rastrelliera " + numero.getNumeroRastrelliera() + " già completa");
-		}
-		else{
-			for(int i = 0;i<bicicletteRastrelliera.length;i++){
-				if(bicicletteRastrelliera[i] == null){
-					bicicletteRastrelliera[i] = bici;
-					break;
-				}
-			}
-		}
-	}
 }
