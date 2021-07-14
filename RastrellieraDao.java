@@ -123,8 +123,8 @@ public class RastrellieraDao {
 		preparato.executeUpdate();
 		//aggiorno la rastrelliera modificando il numero di posti disponibili.
 		query = "UPDATE rastrelliera " +
-					   "SET postidisponibili=postidisponibili+1 " +
-					   "WHERE numerorastrelliera=? ";
+				"SET postidisponibili=postidisponibili+1 " +
+				"WHERE numerorastrelliera=? ";
 		preparato = connessione.prepareStatement(query);
 		preparato.setInt(1,numerorastrelliera);
 		preparato.executeUpdate();
@@ -145,6 +145,34 @@ public class RastrellieraDao {
 				"WHERE numerorastrelliera=? ";
 		preparato = connessione.prepareStatement(query);
 		preparato.setInt(1,numero_rastrelliera);
+		preparato.executeUpdate();
+	}
+	
+	public void ricollocamentoBicicletta(int vecchia_rastrelliera,int nuova_rastrelliera,String tipologia) throws SQLException {
+		String query = "UPDATE bicicletta " +
+					   "SET bicirastrelliera=? " +
+					   "WHERE bicirastrelliera=? " +
+					   "AND tipologia=? " +
+					   "LIMIT 1";
+		PreparedStatement preparato = connessione.prepareStatement(query);
+		preparato.setInt(1,nuova_rastrelliera);
+		preparato.setInt(2,vecchia_rastrelliera);
+		preparato.setString(3,tipologia);
+		preparato.executeUpdate();
+		
+		//aggiorno i posti disponibili nella rastrelliera da cui ho prelevato la bicicletta e quella su cui l'ho depositata.
+		query = "UPDATE rastrelliera " +
+				"SET postidisponibili=postidisponibili-1 " +
+				"WHERE numerorastrelliera=?";
+		preparato = connessione.prepareStatement(query);
+		preparato.setInt(1,nuova_rastrelliera);
+		preparato.executeUpdate();
+		
+		query = "UPDATE rastrelliera " +
+				"SET postidisponibili=postidisponibili+1 " +
+				"WHERE numerorastrelliera=?";
+		preparato = connessione.prepareStatement(query);
+		preparato.setInt(1,vecchia_rastrelliera);
 		preparato.executeUpdate();
 	}
 }
