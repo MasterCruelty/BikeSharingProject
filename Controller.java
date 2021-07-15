@@ -64,6 +64,7 @@ public class Controller {
 			long numero_carta = Long.parseLong(registrazione.getTxtCarta());
 			String scadenza_carta = registrazione.getTxtScadenza();
 			String tipo_abbonamento = "";
+			boolean studente = registrazione.getCheckStudente();
 			while(true){
 				tipo_abbonamento = registrazione.getTxtAbbonamento();
 				if(!accesso.controlloDatiRegistrazione(tipo_abbonamento)){
@@ -87,7 +88,7 @@ public class Controller {
 				abbonamento = new Annuale(0,"");
 			}
 			//creo un oggetto di tipo utente da dare come argomento alla classe DAO per l'inserimento dei dati su database. 
-			accesso.setUtente(nome,cognome, password, false,false,null,carta);
+			accesso.setUtente(nome,cognome, password, studente,false,null,carta);
 			accesso.getUtente().acquista(abbonamento);
 			//ri-setto vuote le caselle di testo della interfaccia grafica.
 			registrazione.setTxtNome("");
@@ -96,6 +97,7 @@ public class Controller {
 			registrazione.setTxtCarta("");
 			registrazione.setTxtScadenza("");
 			registrazione.setTxtAbbonamento("");
+			registrazione.setCheckStudente(false);
 			JOptionPane.showMessageDialog(null,"Dati registrazione confermati:\n"+"nome inserito: " + nome +
 												"\ncognome inserito: " + cognome+"\nnumero carta inserita: " + numero_carta+
 												"\npassword inserita: " + password + "\nscadenza carta inserita: " + scadenza_carta +
@@ -510,14 +512,20 @@ public class Controller {
 				rastre = dao.selectRastrelliera(numero_rastrelliera);
 				utente = userdao.selectUtente(codice_utente);
 				accesso.setRastrelliera(rastre.getNumeroPosti(),rastre.getNumeroRastrelliera(),rastre.getBiciclette());
-				accesso.setUtente(utente.getNome(),utente.getCognome(),utente.getPassword(),false,false,utente.getAbbonamento(),utente.getCarta());
+				accesso.setUtente(utente.getNome(),utente.getCognome(),utente.getPassword(),utente.getStatus(),false,utente.getAbbonamento(),utente.getCarta());
+				double importo = 0.0;
 				//controllo se effettivamente l'utente è in possesso di una bicicletta da restituire.
 				if(dao.controlloNoleggio(codice_utente)){
 					//controllo se la rastrelliera selezionata ha almeno 1 posto disponibile per restituire la bicicletta.
 					if(accesso.getRastrelliera().getNumeroPosti() > 0){
 						bici = dao.selectBicicletta(codice_utente);
-						//calcolo la tariffa relativa all'utilizzo della bicicletta.
-						double importo = accesso.calcolaTariffa(bici);
+						//calcolo la tariffa relativa all'utilizzo della bicicletta. Se si tratta di uno studente e di una bici normale, il noleggio è gratuito.
+						if((!(accesso.getUtente().getStatus())) || (bici instanceof Elettrica)){
+							importo = accesso.calcolaTariffa(bici);
+						}
+						else if((accesso.getUtente().getStatus()) && (bici instanceof Normale)){
+							importo = 0.0;
+						}
 						accesso.getUtente().paga(importo);
 						//aggiorno sul database il residuo della carta dell'utente e aggiorno la rastrelliera e i posti disponibili.
 						userdao.updateResiduo(codice_utente,accesso.getUtente().getCarta().getResiduo());
