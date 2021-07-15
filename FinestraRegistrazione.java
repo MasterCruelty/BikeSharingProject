@@ -29,6 +29,8 @@ public class FinestraRegistrazione extends JFrame{
 	private JTextField txtscadenza = new JTextField(4);
 
 	private JTextField txtabbonamento = new JTextField(10);
+	
+	private JCheckBox checkstudente = new JCheckBox("Studente?");
 
 	private JButton btn_invia = new JButton("conferma");
 	
@@ -36,7 +38,7 @@ public class FinestraRegistrazione extends JFrame{
 	public FinestraRegistrazione() {
 		JPanel pannello = new JPanel();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(600,200);
+		this.setSize(650,200);
 		this.setLocationRelativeTo(null);
 		//aggiungo gli attributi componenti sul pannello
 		pannello.add(lbnome);
@@ -51,6 +53,7 @@ public class FinestraRegistrazione extends JFrame{
 		pannello.add(txtscadenza);
 		pannello.add(lbabbonamento);
 		pannello.add(txtabbonamento);
+		pannello.add(checkstudente);
 		pannello.add(btn_invia);
 		//aggiungo il pannello con i suoi componenti alla finestra
 		this.add(pannello);
@@ -126,6 +129,20 @@ public class FinestraRegistrazione extends JFrame{
 	*/
 	public void setTxtAbbonamento(String abbonamento){
 		this.txtabbonamento.setText(abbonamento);
+	}
+	
+	/**
+	* @return checkstudente
+	*/
+	public boolean getCheckStudente(){
+		System.out.println(checkstudente.isSelected());
+		return this.checkstudente.isSelected();
+	}
+	/**
+	* @param selezione
+	*/
+	public void setCheckStudente(boolean selezione){
+		this.checkstudente.setSelected(selezione);
 	}
 	//metodo usato dal controller per intercettare il click sul bottone per confermare i dati inseriti.
 	public void ascoltoInviaDati(ActionListener bottoneInvia){
