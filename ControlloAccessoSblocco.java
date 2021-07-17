@@ -61,7 +61,6 @@ public class ControlloAccessoSblocco {
 		}
 		return importo;
 	}
-	
 	/**
 	* @param ore
 	* @param minuti
@@ -75,7 +74,6 @@ public class ControlloAccessoSblocco {
 			return false;
 		}
 	}
-	
 	/**
 	* @param tipo_abbonamento
 	* @return boolean
@@ -100,7 +98,6 @@ public class ControlloAccessoSblocco {
 	public Rastrelliera getRastrelliera() {
 		return this.rastrelliera;
 	}
-
 	/**
 	 * @param nome 
 	 * @param cognome 
@@ -118,5 +115,4 @@ public class ControlloAccessoSblocco {
 	public void setRastrelliera(int posti, int numeroRastrelliera,Bicicletta[] biciclette) {
 		this.rastrelliera = new Rastrelliera(posti,numeroRastrelliera,biciclette);
 	}
-
 }
