@@ -135,7 +135,6 @@ public class FinestraRegistrazione extends JFrame{
 	* @return checkstudente
 	*/
 	public boolean getCheckStudente(){
-		System.out.println(checkstudente.isSelected());
 		return this.checkstudente.isSelected();
 	}
 	/**
