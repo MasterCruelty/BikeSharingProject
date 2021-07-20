@@ -8,7 +8,7 @@ You have to install MySQL DBMS to import my dumps. Connector file .jar is alread
 
 ### Usage
 #### compile
-<code>javac -cp libs/junit-4.13.2.jar:. SistemaBikeSharing.java</code>
+<code>javac -cp libs/mysql-connector-java-8.0.24.jar:. SistemaBikeSharing.java</code>
 #### Exec
 <code>java -cp libs/mysql-connector-java-8.0.24.jar:. SistemaBikeSharing</code>
 #### Tests
