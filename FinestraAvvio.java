@@ -18,6 +18,8 @@ public class FinestraAvvio extends JFrame{
 
 	private JButton restituzione = new JButton("Restituzione");
 	
+	private JButton statistiche = new JButton("Statistiche");
+	
 	//Costruttore
 	public FinestraAvvio() {
 		JPanel pannello = new JPanel();
@@ -29,6 +31,7 @@ public class FinestraAvvio extends JFrame{
 		pannello.add(registrazione);
 		pannello.add(accessoRastrelliera);
 		pannello.add(restituzione);
+		pannello.add(statistiche);
 		//aggiungo il pannello con i suoi componenti alla finestra
 		this.add(pannello);
 	}
@@ -43,5 +46,9 @@ public class FinestraAvvio extends JFrame{
 	//metodo usato dal controller per intercettare il click sul bottone restituzione.
 	public void ascoltoRestituzione(ActionListener bottoneRestituzione){
 		restituzione.addActionListener(bottoneRestituzione);
+	}
+	//metodo usato dal controller per intercettare il click sul bottone statistiche.
+	public void ascoltoStatistiche(ActionListener bottoneStatistiche){
+		statistiche.addActionListener(bottoneStatistiche);
 	}
 }

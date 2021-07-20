@@ -38,6 +38,7 @@ public class Controller {
 		this.avvio.ascoltoRegistrazione(new RegistrazioneAscolto());
 		this.avvio.ascoltoRastrelliera(new RastrellieraAscolto());
 		this.avvio.ascoltoRestituzione(new RestituzioneAscolto());
+		this.avvio.ascoltoStatistiche(new StatisticheAscolto());
 		this.registrazione.ascoltoInviaDati(new ConfermaDatiAscolto());
 		this.rastrelliera.ascoltoAccesso(new ConfermaAccessoAscolto());
 		this.prelievobici.ascoltoNormale(new NormaleAscolto());
@@ -47,6 +48,20 @@ public class Controller {
 		this.accesso = accesso;
 	}
 	
+	//listener che alcuni dati statistici sul sistema.
+	public class StatisticheAscolto implements ActionListener{
+		public void actionPerformed(ActionEvent arg0){
+			String statistica = "";
+			UtenteDao userdao = new UtenteDao();
+			try{
+				statistica = userdao.statistiche();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			JOptionPane.showMessageDialog(null,statistica);
+			return;
+		}
+	}
 	//listener che apre la finestra della registrazione di un abbonamento.
 	public class RegistrazioneAscolto implements ActionListener{
 		public void actionPerformed(ActionEvent arg0){
