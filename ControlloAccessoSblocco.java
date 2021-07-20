@@ -45,22 +45,24 @@ public class ControlloAccessoSblocco {
 		long differenza = attuale.getTime() - prelievo.getTime();
 		long differenza_ore = differenza / (60 * 60 * 1000);
 		long differenza_minuti = differenza / (60 * 1000);
+		long tempo_noleggio = differenza_ore + differenza_minuti;
 		double tariffa = bicicletta.getTariffa();
 		double importo = 0.0;
 		if(controlloMulta(differenza_ore,differenza_minuti)){
 			importo += 150;
 		}
-		if(((Normale)bicicletta).getGratuita()){
-			return importo;
-		}
-		if(differenza_minuti > 30 && bicicletta instanceof Normale){
-			importo += tariffa;
-		}
-		else if(differenza_minuti > 30){
-			importo += tariffa * 2;
-		}
-		if(differenza_ore > 0){
-			importo+= tariffa * (differenza_ore * 2);
+		if(bicicletta instanceof Normale){
+			if(((Normale)bicicletta).getGratuita()){
+				return importo;
+		}	}
+		while(tempo_noleggio > 30){
+			if(tempo_noleggio > 30 && bicicletta instanceof Normale){
+				importo += tariffa;
+			}
+			else if(tempo_noleggio > 30){
+				importo += tariffa * 2;
+			}
+			tempo_noleggio -= 30;
 		}
 		return importo;
 	}
