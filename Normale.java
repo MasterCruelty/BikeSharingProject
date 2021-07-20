@@ -6,26 +6,26 @@ import java.util.*;
  */
 public class Normale extends Bicicletta {
 
-	private boolean mezzoraGratuita = false;
+	private boolean gratuita = false;
 	
 	//costruttore
-	public Normale(double tariffa, String orario, boolean mezzoraGratuita) {
+	public Normale(double tariffa, String orario, boolean gratis) {
 		super(tariffa,orario);
 		this.setTariffa(0.50);
-		this.mezzoraGratuita = mezzoraGratuita;
+		this.gratuita = gratis;
 	}
 
 	/**
 	 * @return mezzoraGratuita
 	 */
-	public Boolean getMezzoraGratuita() {
-		return this.mezzoraGratuita;
+	public Boolean getGratuita() {
+		return this.gratuita;
 	}
 
 	/**
 	 * @param gratis 
 	 */
-	public void setMezzoraGratuita(Boolean gratis) {
-		this.mezzoraGratuita = gratis;
+	public void setGratuita(Boolean gratis) {
+		this.gratuita = gratis;
 	}
 }
