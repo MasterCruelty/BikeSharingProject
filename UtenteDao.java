@@ -151,4 +151,32 @@ public class UtenteDao{
 		preparato.setInt(2,codiceutente);
 		preparato.executeUpdate();
 	}
+	
+	public String statistiche() throws SQLException{
+		String query = "SELECT COUNT(*) AS totutenti, abbonamento.tipologia " +
+					  "FROM utenti " +
+					  "JOIN abbonamento " +
+					  "ON utenti.codiceutente=abbonamento.codiceutente " +
+					  "GROUP BY abbonamento.tipologia";
+		PreparedStatement preparato = connessione.prepareStatement(query);
+		boolean check = false;
+		ResultSet rs = preparato.executeQuery();
+		int i = 0;
+		String result = "Attualmente vi sono questi dati nel sistema:\n";
+		int utenti = 0;
+		String abbo = "";
+		int totutenti = 0;
+		while(rs.next()){
+			check = true;
+			utenti = rs.getInt("totutenti");
+			abbo = rs.getString("tipologia");
+			result+= utenti + " abbonamenti di tipo  " + abbo + " sottoscritti.\n";
+			totutenti += utenti;
+		}
+		result += "In totale vi sono " + totutenti + " utenti registrati.";
+		if(check)
+			return result;
+		else
+			return "Non vi sono ancora dati sufficienti da mostrare.";
+	}
 }
