@@ -50,6 +50,9 @@ public class ControlloAccessoSblocco {
 		if(controlloMulta(differenza_ore,differenza_minuti)){
 			importo += 150;
 		}
+		if(((Normale)bicicletta).getGratuita()){
+			return importo;
+		}
 		if(differenza_minuti > 30 && bicicletta instanceof Normale){
 			importo += tariffa;
 		}

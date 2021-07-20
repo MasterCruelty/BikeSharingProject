@@ -534,13 +534,10 @@ public class Controller {
 					//controllo se la rastrelliera selezionata ha almeno 1 posto disponibile per restituire la bicicletta.
 					if(accesso.getRastrelliera().getNumeroPosti() > 0){
 						bici = dao.selectBicicletta(codice_utente);
+						if(bici instanceof Normale)
+							((Normale)bici).setGratuita(utente.getStatus());
 						//calcolo la tariffa relativa all'utilizzo della bicicletta. Se si tratta di uno studente e di una bici normale, il noleggio è gratuito.
-						if((!(accesso.getUtente().getStatus())) || (bici instanceof Elettrica)){
-							importo = accesso.calcolaTariffa(bici);
-						}
-						else if((accesso.getUtente().getStatus()) && (bici instanceof Normale)){
-							importo = 0.0;
-						}
+						importo = accesso.calcolaTariffa(bici);
 						accesso.getUtente().paga(importo);
 						//aggiorno sul database il residuo della carta dell'utente e aggiorno la rastrelliera e i posti disponibili.
 						userdao.updateResiduo(codice_utente,accesso.getUtente().getCarta().getResiduo());
