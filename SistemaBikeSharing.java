@@ -1,3 +1,6 @@
+import View.*;
+import Model.*;
+import Controller.*;
 import java.sql.SQLException;
 public class SistemaBikeSharing{
 	public static void main(String[] args){
