@@ -76,7 +76,7 @@ public class RastrellieraDao {
 		}
 		if(check == true){
 			if(tipologia.equals("normale")){
-				return new Normale(tariffa,orarioprelievo,true);
+				return new Normale(tariffa,orarioprelievo,false);
 			}
 			else{
 				return new Elettrica(tariffa,orarioprelievo,seggiolino);
