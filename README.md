@@ -2,7 +2,8 @@
 ### What is it?
 This is a Bike sharing simulator. You register and buy a subscription and you rent a bike, then you give back to the system and you pay.
 ### Requirements
-You have to install MySQL DBMS to import my dumps. Connector file .jar is already in this repo.
+You have to install MySQL DBMS to import my dumps. Connector file .jar is already in this repo.<br>
+If you would like to open the .mdj file you need to install StarUML.
 
 ---
 
@@ -17,4 +18,4 @@ You have to install MySQL DBMS to import my dumps. Connector file .jar is alread
 
 ---
 ### Language
-The project is all in Italian, just saying.
+The project is all in Italian(source comments, diagrams and relation), just saying.
