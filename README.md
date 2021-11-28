@@ -1,3 +1,11 @@
+![License](https://img.shields.io/github/license/MasterCruelty/BikeSharingProject)
+[![image](https://img.shields.io/github/stars/MasterCruelty/BikeSharingProject)](https://github.com/MasterCruelty/BikeSharingProject/stargazers)
+[![image](https://img.shields.io/github/forks/MasterCruelty/BikeSharingProject)](https://github.com/MasterCruelty/BikeSharingProject/network/members)
+![CodeSize](https://img.shields.io/github/languages/code-size/MasterCruelty/BikeSharingProject)
+[![image](https://img.shields.io/github/issues/MasterCruelty/BikeSharingProject)](https://github.com/MasterCruelty/BikeSharingProject/issues)
+![image](https://img.shields.io/github/languages/top/MasterCruelty/BikeSharingProject)
+![image](https://img.shields.io/github/commit-activity/w/MasterCruelty/BikeSharingProject)
+
 # BikeSharingProject
 ### What is it?
 This is a Bike sharing simulator. You register and buy a subscription and you rent a bike, then you give back to the system and you pay.
